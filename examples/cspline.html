@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>vizutil.js</title>
+</head>
+
+<body>
+
+<script src="../src/geom_util.js"></script>
+
+
+<script>
+
+var pnts = [
+    {x:500*Math.random(),y:500*Math.random()},
+    {x:500*Math.random(),y:500*Math.random()},
+    {x:500*Math.random(),y:500*Math.random()},
+    {x:500*Math.random(),y:500*Math.random()},
+    {x:500*Math.random(),y:500*Math.random()}
+];
+
+
+//Create the SVG
+let splineSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+splineSVG.setAttributeNS(null,"width",500);
+splineSVG.setAttributeNS(null,"height",500);
+document.body.appendChild(splineSVG);
+
+
+//Create the SVG
+let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+group.setAttributeNS(null, "transform", "translate(200,200) rotate(0)");
+group.setAttributeNS(null, "stroke", "red");
+group.setAttributeNS(null, "stroke-width", "5");
+group.setAttributeNS(null, "fill", "none");
+splineSVG.appendChild(group);
+
+for (let i=0; i < pnts.length; i++) {
+
+}
+
+</script>
+
+
+</body>
+</html>
