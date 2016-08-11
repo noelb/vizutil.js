@@ -1,2 +1,2 @@
 # vizutil.js
-Utility libraries to for geomertry and graphics.
+Utility libraries to for geometry and graphics.
