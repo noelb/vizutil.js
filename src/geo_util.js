@@ -38,11 +38,11 @@ class GeomUtil {
         ]
     }
 
-    static toRad = function(num) {
+    static toRad(num) {
         return (num * Math.PI / 180);
     }
 
-    static toDeg = function(num) {
+    static toDeg(num) {
         return (num * 180 / Math.PI);
     }
 
@@ -74,7 +74,13 @@ class GeomUtil {
         return distance;
     }
 
-
+    /**
+     * 
+     * Measures the total length of a path
+     * 
+     * @param path [{x,y}]
+     * @returns number
+     */
     static pathXYLength(path) {
         let distance = 0;
         for (let i=0; i < path.length-1; i+=1) {
@@ -91,12 +97,12 @@ class GeomUtil {
      *
      * Returns a point that is "percent" distance between two points
      *
-     * @param x0
-     * @param y0
-     * @param x1
-     * @param y1
+     * @param x0 number
+     * @param y0 number
+     * @param x1 number
+     * @param y1 numer
      * @param percent
-     * @returns {*[]}
+     * @returns [[number,number],[number,number]]
      */
     static interpolate(x0,y0,x1,y1,percent) {
         return [
@@ -105,7 +111,12 @@ class GeomUtil {
         ];
     }
 
-
+    /**
+     * @param xy0 {x,y}
+     * @param xy1 {x,y}
+     * @param percent number
+     * @return {x,y}
+     */
     static interpolateXY(xy0,xy1,percent=.5) {
         return {
             x:xy0.x + (xy1.x-xy0.x)*percent,
@@ -120,7 +131,7 @@ class GeomUtil {
      *
      * @param path
      * @param percent
-     * @returns {*[]}
+     * @returns [number,number]
      */
     static interpolatePath(path,percent) {
 
