@@ -2,19 +2,29 @@
 <html>
 
 <head>
-    <title>Split Bezier</title>
+    <title>Catmull-Rom Spline</title>
     <link rel="stylesheet" href="main.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800" rel="stylesheet">
+
+    <script src="../src/geom_util.js"></script>
+    <script src="../src/svg_util.js"></script>
+    <style>
+
+    </style>
 </head>
 
 <body>
 
-<script src="../src/geom_util.js"></script>
-
-
-<h1>Split Bezier</h1>
+<h1>Catmull-Rom Spline</h1>
+<p>
+<a href="https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline">Wikipedia</a>
+</p>
 <pre>
-    let pnts = [ {x:0,y:0}, {x:23,y:-4}, ... ]; //The points you want to draw a curve through
-    let splinePnts = GeomUtil.cspline(pnts,.02); //Will return an array of points forming a path
+//The points you want to draw a curve through
+let pnts = [ {x:0,y:0}, {x:23,y:-4}, ... ];
+
+//Will return an array of points forming a path
+let splinePnts = GeomUtil.csplineXY(pnts,.02);
 </pre>
 
 
@@ -33,53 +43,49 @@ for (let i=0; i < 10; i++) {
 }
 
 //Create the spline
-let spline = GeomUtil.cspline(pnts,.02);
+let spline = GeomUtil.csplineXY(pnts,.02);
 
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 
-
 //Create an SVG document
 let splineSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-splineSVG.setAttributeNS(null,"width",500);
-splineSVG.setAttributeNS(null,"height",500);
+splineSVG.setAttribute("width",500);
+splineSVG.setAttribute("height",500);
 document.body.appendChild(splineSVG);
 
 
 
 //Convert a spline to an SVG path
-let pathStr = "";
-for (let i=0; i < spline.length; i++) {
-    if (i == 0) pathStr += "M "; else pathStr += "L ";
-    pathStr += spline[i].x+" "+spline[i].y+" ";
-}
-let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-path.setAttributeNS(null, "d", pathStr);
-path.setAttributeNS(null, "stroke", "black");
-path.setAttributeNS(null, "stroke-width", ".5");
-path.setAttributeNS(null, "opacity", ".2");
-path.setAttributeNS(null, "fill", "none");
+let path = SvgUtil.getPathXY(document,spline);
+path.setAttribute("stroke", "black");
+path.setAttribute("stroke-width", ".5");
+path.setAttribute("opacity", ".2");
+path.setAttribute("fill", "none");
 splineSVG.appendChild(path);
+
 
 
 //Draw an "X" for every intersection point
 let size = 3;
 for (let i=0; i < pnts.length; i++) {
     let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttributeNS(null, "d",
+    path.setAttribute("d",
             "M "+ (pnts[i].x-size) +" "+ (pnts[i].y-size) +" "+
             "L "+ (pnts[i].x+size) +" "+ (pnts[i].y+size) +" "+
             "M "+ (pnts[i].x-size) +" "+ (pnts[i].y+size) +" "+
             "L "+ (pnts[i].x+size) +" "+ (pnts[i].y-size)
     );
-    path.setAttributeNS(null, "stroke", "black");
-    path.setAttributeNS(null, "stroke-width", ".5");
-    path.setAttributeNS(null, "opacity", "1");
-    path.setAttributeNS(null, "fill", "none");
+    path.setAttribute("stroke", "black");
+    path.setAttribute("stroke-width", ".5");
+    path.setAttribute("opacity", "1");
+    path.setAttribute("fill", "none");
     splineSVG.appendChild(path);
 }
+
+
 
 </script>
 
