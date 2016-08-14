@@ -2,43 +2,83 @@
 <html>
 
 <head>
-    <title>vizutil.js</title>
+    <title>Catmull-Rom Spline</title>
+    <link rel="stylesheet" href="main.css" />
+    <script src="../src/geom_util.js"></script>
+    <script src="../src/svg_util.js"></script>
 </head>
 
 <body>
 
-<script src="../src/geom_util.js"></script>
+<h1>Catmull-Rom Spline</h1>
+<pre>
+//The points you want to draw a curve through
+let pnts = [ {x:0,y:0}, {x:23,y:-4}, ... ];
+
+//Will return an array of points forming a path
+let splinePnts = GeomUtil.csplineXY(pnts,.02);
+</pre>
+
 
 
 <script>
+let width = 500; //The size of the SVG canvas
+let border = 50; //Keep the points from being too close to the edges
 
-var pnts = [
-    {x:500*Math.random(),y:500*Math.random()},
-    {x:500*Math.random(),y:500*Math.random()},
-    {x:500*Math.random(),y:500*Math.random()},
-    {x:500*Math.random(),y:500*Math.random()},
-    {x:500*Math.random(),y:500*Math.random()}
-];
+//Create a set of random points
+let pnts = [];
+for (let i=0; i < 10; i++) {
+    pnts.push( {
+        x:(width-border*2)*Math.random() + border,
+        y:(width-border*2)*Math.random() + border
+    } );
+}
+
+//Create the spline
+let spline = GeomUtil.csplineXY(pnts,.02);
 
 
-//Create the SVG
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+
+//Create an SVG document
 let splineSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 splineSVG.setAttributeNS(null,"width",500);
 splineSVG.setAttributeNS(null,"height",500);
 document.body.appendChild(splineSVG);
 
 
-//Create the SVG
-let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-group.setAttributeNS(null, "transform", "translate(200,200) rotate(0)");
-group.setAttributeNS(null, "stroke", "red");
-group.setAttributeNS(null, "stroke-width", "5");
-group.setAttributeNS(null, "fill", "none");
-splineSVG.appendChild(group);
 
+//Convert a spline to an SVG path
+let path = SvgUtil.getPathXY(document,spline);
+path.setAttributeNS(null, "stroke", "black");
+path.setAttributeNS(null, "stroke-width", ".5");
+path.setAttributeNS(null, "opacity", ".2");
+path.setAttributeNS(null, "fill", "none");
+splineSVG.appendChild(path);
+
+
+
+//Draw an "X" for every intersection point
+let size = 3;
 for (let i=0; i < pnts.length; i++) {
-
+    let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttributeNS(null, "d",
+            "M "+ (pnts[i].x-size) +" "+ (pnts[i].y-size) +" "+
+            "L "+ (pnts[i].x+size) +" "+ (pnts[i].y+size) +" "+
+            "M "+ (pnts[i].x-size) +" "+ (pnts[i].y+size) +" "+
+            "L "+ (pnts[i].x+size) +" "+ (pnts[i].y-size)
+    );
+    path.setAttributeNS(null, "stroke", "black");
+    path.setAttributeNS(null, "stroke-width", ".5");
+    path.setAttributeNS(null, "opacity", "1");
+    path.setAttributeNS(null, "fill", "none");
+    splineSVG.appendChild(path);
 }
+
+
 
 </script>
 

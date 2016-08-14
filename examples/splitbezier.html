@@ -2,7 +2,8 @@
 <html>
 
 <head>
-    <title>vizutil.js</title>
+    <title>Split Bezier</title>
+    <link rel="stylesheet" href="main.css" />
 </head>
 
 <body>
@@ -10,7 +11,7 @@
 <script src="../src/geom_util.js"></script>
 
 
-<h1>Catmull-Rom Spline</h1>
+<h1>Split Bezier</h1>
 <pre>
     let pnts = [ {x:0,y:0}, {x:23,y:-4}, ... ]; //The points you want to draw a curve through
     let splinePnts = GeomUtil.cspline(pnts,.02); //Will return an array of points forming a path
