@@ -20,7 +20,7 @@ code base you may have rather than dictating those constructs for you. It's
 not the right architecture for every project, but is for those who like to use
 as little code as possible to achieve their ends.
 
-
+...
 
 ## Point Objects
 
