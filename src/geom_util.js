@@ -100,6 +100,99 @@ class GeomUtil {
     }
 
 
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+    /**
+     *
+     * @param x0 line0
+     * @param y0
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param x3
+     * @param y3
+     * @returns {*}
+     */
+    static intersect(a0x,a0y,a1x,a1y,b0x,b0y,b1x,b1y,segment=true,xy=false) {
+
+        //calculate directional constants
+        let k1 = (a1y-a0y) / (a1x-a0x);
+        let k2 = (b1y-b0y) / (b1x-b0x);
+
+        // if the directional constants are equal, the lines are parallel,
+        // meaning there is no intersection point.
+        if (k1 == k2) return null;
+
+        let x,y;
+        let m1,m2;
+
+        // an infinite directional constant means the line is vertical
+        if( !isFinite(k1) ) {
+
+            // so the intersection must be at the x coordinate of the line
+            x = a0x;
+            m2 = b0y - k2 * b0x;
+            y = k2 * x + m2;
+
+        // same as above for line 2
+        } else if ( !isFinite(k2) ) {
+
+            m1 = a0y - k1 * a0x;
+            x = b0x;
+            y = k1 * x + m1;
+
+        // if neither of the lines are vertical
+        } else {
+
+            m1 = a0y - k1 * a0x;
+            m2 = b0y - k2 * b0x;
+            x = (m1-m2) / (k2-k1);
+            y = k1 * x + m1;
+
+        }
+
+        if (x == null || y == null) return null; //TODO: Does this ever happen?
+
+        //If it needs to be on a segment...
+        if (segment) {
+            //...ensure that the point is within the bounds of BOTH segments, otherwise there's no intersection
+            if (!GeomUtil._inRange(x,y, a0x, a0y, a1x, a1y) || !GeomUtil._inRange(x,y, b0x, b0y, b1x, b1y)) {
+                return null
+            }
+        }
+
+        return xy ? {x:x,y:y} : [x,y];
+
+    }
+
+
+    /**
+     *
+     * TODO: Double check how this works
+     *
+     * @param x - the x position of the point to test
+     * @param y - the y position of the point to test
+     * @param ax - the x position of the start point in the line segment
+     * @param ay - the y position of the start point in the line segment
+     * @param bx - the x position of the end point in the line segment
+     * @param by - the y position of the end point in the line segment
+     * @returns {boolean}
+     * @private
+     */
+    static _inRange(x,y,ax,ay,bx,by) {
+
+        if (ax != bx) {
+            return x <= ax != x < bx;
+        } else {
+            return y <= ay != y < by;
+        }
+
+    }
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
     /**
      *
      * Returns a point that is "percent" distance between two points
@@ -148,6 +241,7 @@ class GeomUtil {
 
     }
 
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 
     /**
@@ -168,7 +262,9 @@ class GeomUtil {
     }
 
 
-    
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
     /**
      * Bernstein's Polynomials
      * http://iscriptdesign.com/?sketch=tutorial/splitbezier
