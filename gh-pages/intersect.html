@@ -8,30 +8,6 @@ Find the intersection between two different line segments.
 </p>
 
 
-
-<pre>
-// Two lines that don't cross, but would cross each other if extended
-var line0 = [ {x:0,y:0}, {x:10,y:10} ] ;
-var line1 = [ {x:100,y:0}, {x:90,y:10} ] ;
-
-// FINDS THE INTERSECTION BETWEEN LINE SEGMENTS
-// The example segments don't cross, so this returns null
-// test0 = null
-var test0 = GeomUtil.intersect(
-    line0[0].x,line0[0].y,line0[1].x,line0[1].y, //First line
-    line1[0].x,line1[0].y,line1[1].x,line1[1].y //Second line
-    );
-
-// FINDS THE INTERSECTION BETWEEN LINES
-// Using lines (instead of segments) return an intersection
-// test1 = [50,50]
-var test1 = GeomUtil.intersect(
-    line0[0].x,line0[0].y,line0[1].x,line0[1].y, //First line
-    line1[0].x,line1[0].y,line1[1].x,line1[1].y, //Second line
-    false);
-</pre>
-
-
 <pre>
 // YOU CAN CHOOSE RESPONSE FORMAT
 
@@ -52,6 +28,28 @@ var interXY = GeomUtil.intersect(
     null,true);
 </pre>
 
+<pre>
+// YOU CAN DECIDE IF YOU WANT INTERSECTIONS
+// OUTSIDE THE BOUNDS OF THE SEGMENT
+
+// Two lines that would cross each other if extended
+var line0 = [ {x:0,y:0}, {x:10,y:10} ] ;
+var line1 = [ {x:100,y:0}, {x:90,y:10} ] ;
+
+// The segments don't cross, so return null
+// test0 = null
+var test0 = GeomUtil.intersect(
+    line0[0].x,line0[0].y,line0[1].x,line0[1].y, //First line
+    line1[0].x,line1[0].y,line1[1].x,line1[1].y //Second line
+    );
+
+// The same segments, but show me where they intersect if infinite
+// test1 = [50,50]
+var test1 = GeomUtil.intersect(
+    line0[0].x,line0[0].y,line0[1].x,line0[1].y, //First line
+    line1[0].x,line1[0].y,line1[1].x,line1[1].y, //Second line
+    false);
+</pre>
 
 <div class="diagram">
     <!-- The SVG diagram will be appended here -->
