@@ -89,18 +89,18 @@ class SvgUtil {
             path[controlIndex].x = pnt.x;
             path[controlIndex].y = pnt.y;
             SvgUtil.curve(document,path,null,pathSVG);
-        }
+        };;
 
         downHandler = () => {
             document.removeEventListener("mousedown",downHandler);
             document.addEventListener("mousemove",moveHandler);
             document.addEventListener("mouseup",upHandler)
-        }
+        };;
 
         upHandler = () => {
             document.removeEventListener("mousemove",upHandler);
             document.removeEventListener("mousemove",moveHandler);
-        }
+        };;
 
         circle.addEventListener("mousedown",downHandler);
 
