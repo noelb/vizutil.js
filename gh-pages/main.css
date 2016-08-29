@@ -5,19 +5,52 @@ html, body {
     height: 100%;
     border: none;
     font-size: 10.5pt;
+    color: #6a7777;
     font-family: "Open Sans","Helvetica Neue",sans-serif;
+    background-color: #fcfcfc;
 }
 
-body {
-    padding: 32px;
+
+nav {
+    position: absolute;
+    width: 200px;
+    padding: 64px;
+
 }
+
+
+nav ul {
+    padding: 0;
+    margin: 0 0 10.5pt 0;
+}
+
+
+section {
+    position: absolute;
+    /* width: auto; */
+    width: 500px;
+    padding: 64px;
+    margin-left: 264px;
+}
+
+
+header {
+    padding: 64px;
+}
+
+
+nav h1 {
+    color: #00eedd;
+}
+
 
 h1 {
     font-size: 32pt;
-    margin: 0 0 6pt 0;
+    margin: -12px 0 32pt 0; /* Remove whitespace at top of font, make distance under smaller */
     padding: 0;
     font-weight: 300;
 }
+
 
 h2 {
     margin: 10.5pt 0 3.3pt 0;
@@ -26,6 +59,73 @@ h2 {
     font-weight: normal;
 }
 
+
 pre {
-    padding: 0;
+    font-size: 8pt;
+    padding: 32px;
+    margin: 32pt 0 0 0;
+    background-color: #f4f4f4;
+}
+
+
+li {
+    list-style: none;
+}
+
+
+a, a:visited, a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+
+.diagram {
+    margin: 32pt 0 0 0;
+    background-color: white;
+    border: 1px solid black;
+    display: inline-block;
+}
+
+
+footer {
+    margin: 32pt 0 0 0;
+    font-size: 8pt;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+form {
+
+    font-size: 8pt;
+}
+
+form li {
+    padding: 10px 0 0 0;
+}
+
+
+form button {
+    font-weight: 800;
+    border-radius: 4px;
+    font-size: 8pt;
+    padding: 10px 32pt ;
+    background-color: #00eedd;
+    border: 1px solid #00ddcc;
+    color: white;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 1px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition-duration: 0.2s;
+}
+
+form button:hover, form button:focus {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+
+form button:active {
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
+    background: #00ead9;
+    border: solid 1px rgba(0,0,0,.2);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
 }

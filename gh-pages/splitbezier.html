@@ -1,88 +1,82 @@
-<!DOCTYPE html>
-<html>
+---
+layout: default
+title: Split Bezier
+---
 
-<head>
-    <title>Split Bezier</title>
-    <link rel="stylesheet" href="main.css" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800" rel="stylesheet">
-
-</head>
-
-<body>
-
-<script src="../src/geom_util.js"></script>
-
-
-<h1>Split Bezier</h1>
 <pre>
-    let pnts = [ {x:0,y:0}, {x:23,y:-4}, ... ]; //The points you want to draw a curve through
-    let splinePnts = GeomUtil.cspline(pnts,.02); //Will return an array of points forming a path
+//The points you want to draw a curve through
+let pnts = [ {x:0,y:0}, {x:23,y:-4}, ... ];
+
+//Will return an array of points forming a path
+let splinePnts = GeomUtil.cspline(pnts,.02);
 </pre>
 
 
+<div class="diagram"><!-- The SVG diagram will be appended here --></div>
+
+<form onsubmit="refresh(); return false;">
+    <li>
+        <button>Randomize</button>
+    </li>
+</form>
+
 
 <script>
-let width = 500; //The size of the SVG canvas
-let border = 50; //Keep the points from being too close to the edges
+var WIDTH = 500; //The size of the SVG canvas
+var BORDER = 50; //Keep the points from being too close to the edges
+
 
 //Create a set of random points
-let pnts = [];
-for (let i=0; i < 10; i++) {
+var pnts = [];
+for (let i=0; i < 4; i++) {
     pnts.push( {
-        x:(width-border*2)*Math.random() + border,
-        y:(width-border*2)*Math.random() + border
+        x:(WIDTH-BORDER*2)*Math.random() + BORDER,
+        y:(WIDTH-BORDER*2)*Math.random() + BORDER
     } );
 }
 
+var bezier = [{x:100,y:200},{x:100,y:100},{x:200,y:100},{x:200,y:200}];
+
+
 //Create the spline
-let spline = GeomUtil.cspline(pnts,.02);
+//var spline = GeomUtil.splitBezierXY(pnts,.02);
 
-
+var mainSVG = null;
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+function refresh() {
+    //Remove what was there before
+    if (mainSVG != null) mainSVG.parentElement.removeChild(mainSVG);
 
 
-//Create an SVG document
-let splineSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-splineSVG.setAttribute("width",500);
-splineSVG.setAttribute("height",500);
-document.body.appendChild(splineSVG);
+    //Create an SVG document
+    mainSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    mainSVG.setAttribute("width", WIDTH.toString());
+    mainSVG.setAttribute("height", WIDTH.toString());
+    document.getElementsByClassName("diagram")[0].appendChild(mainSVG);
 
 
+    //Convert a spline to an SVG path
+    var pathSVG = SvgUtil.curve(document, bezier);
+    console.log(pathSVG);
+    pathSVG.setAttribute("stroke", "black");
+    pathSVG.setAttribute("stroke-width", ".5");
+    pathSVG.setAttribute("opacity", ".2");
+    pathSVG.setAttribute("fill", "none");
+    mainSVG.appendChild(pathSVG);
 
-//Convert a spline to an SVG path
-let pathStr = "";
-for (let i=0; i < spline.length; i++) {
-    if (i == 0) pathStr += "M "; else pathStr += "L ";
-    pathStr += spline[i].x+" "+spline[i].y+" ";
-}
-let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-path.setAttribute("d", pathStr);
-path.setAttribute("stroke", "black");
-path.setAttribute("stroke-width", ".5");
-path.setAttribute("opacity", ".2");
-path.setAttribute("fill", "none");
-splineSVG.appendChild(path);
+    var editSVG = SvgUtil.editControls(document,bezier,pathSVG);
+    mainSVG.appendChild(editSVG);
+
+    //pathSVG.querySelector('[data-id=0]');
+    //pathSVG.querySelector('[data-id=1]');
+    //[data-point-id="7febe088-4eca-493b-8455-385b39ad30e3"]
 
 
-//Draw an "X" for every intersection point
-let size = 3;
-for (let i=0; i < pnts.length; i++) {
-    let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d",
-            "M "+ (pnts[i].x-size) +" "+ (pnts[i].y-size) +" "+
-            "L "+ (pnts[i].x+size) +" "+ (pnts[i].y+size) +" "+
-            "M "+ (pnts[i].x-size) +" "+ (pnts[i].y+size) +" "+
-            "L "+ (pnts[i].x+size) +" "+ (pnts[i].y-size)
-    );
-    path.setAttribute("stroke", "black");
-    path.setAttribute("stroke-width", ".5");
-    path.setAttribute("opacity", "1");
-    path.setAttribute("fill", "none");
-    splineSVG.appendChild(path);
 }
 
+    refresh();
 </script>
 
 

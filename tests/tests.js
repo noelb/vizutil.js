@@ -13,3 +13,7 @@ QUnit.test('distance', function (assert) {
     assert.strictEqual( GeomUtil.distance(-32,-13), 34.539832078341085, 'Negative' );
     assert.strictEqual( GeomUtil.distance(.56,.23), 0.6053924347066125, 'Decimal' );
 });
+//
+// QUnit.test('intersect', function(assert) {
+//     assert.strictEqual( GeomUtil.distance(0,0), 0, 'Zero' );
+// })

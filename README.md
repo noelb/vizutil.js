@@ -17,8 +17,10 @@ to a graphics engine, and it can be annoying to add another set of objects into 
 This library uses (mostly) static methods that can be used in isolation
 as much as possible. The library can then easily work alongside whatever
 code base you may have. It's not the right architecture for every project, but 
-for this type of library, iy can help reduce the amount of code you introduce 
-into your projects.
+for this type of library, it can help reduce the amount of code you introduce 
+into your projects). In fact, in some cases you may want to simply copy and paste
+the function you want out of this library into your own utility classes. We think 
+that's okay too, and this architecture should facilitate that.
 
 
 ## ECMA 6
@@ -31,10 +33,9 @@ to process it yourself.
 ## Point Objects
 
 In keeping with our design philosophy, we don't introduce our own "point"
-or "vector" object.
+or "vector" objects.
 
-Instead, we use a simple array with two elements as a point. The zero position is "x", 
-the one position is "y". Here is an example:
+Instead, you can either pass in an array containing two values (x & y.)
 
 `
 let mypoint = [123,567]

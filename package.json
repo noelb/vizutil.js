@@ -1,0 +1,7 @@
+{
+  "name": "vizutil.js",
+  "version": "0.0.1",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.13.2"
+  }
+}
