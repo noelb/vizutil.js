@@ -20,6 +20,8 @@ class HexUtil {
         return {x:x*xStep, y:y*yStep + offsetY};
     }
 
+
+
     //Converts a grid position into the center point in pixel space
     getCenterGeoPt(x, y) {
         var pt = this.getCenterPoint(x,y);

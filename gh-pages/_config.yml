@@ -32,5 +32,4 @@ markdown: kramdown
 theme: minima
 
 
-include: ["./../src/geo_util.js"]
 exclude: ["*.sh","README.md"]

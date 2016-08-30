@@ -100,9 +100,17 @@ form {
     font-size: 8pt;
 }
 
-form li {
-    padding: 10px 0 0 0;
+form > * {
+    margin: 10px 0 0 0;
+    display: block;
 }
+
+form label {
+    margin-bottom: -5px;
+}
+/*form li {*/
+    /*padding: 10px 0 0 0;*/
+/*}*/
 
 
 form button {

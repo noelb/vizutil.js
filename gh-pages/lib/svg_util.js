@@ -110,18 +110,15 @@ var SvgUtil = function () {
                 path[controlIndex].y = pnt.y;
                 SvgUtil.curve(document, path, null, pathSVG);
             };
-
             _downHandler = function downHandler() {
                 document.removeEventListener("mousedown", _downHandler);
                 document.addEventListener("mousemove", moveHandler);
                 document.addEventListener("mouseup", _upHandler);
             };
-
             _upHandler = function upHandler() {
                 document.removeEventListener("mousemove", _upHandler);
                 document.removeEventListener("mousemove", moveHandler);
             };
-
             circle.addEventListener("mousedown", _downHandler);
 
             return group;
@@ -165,7 +162,7 @@ var SvgUtil = function () {
             } else {
                 pathStr += "M " + path[0][0] + " " + path[0][1] + " ";
                 for (var _i = 1; _i < path.length; _i += 3) {
-                    pathStr += "C " + path[_i + 0][0] + " " + path[_i + 0][0] + " " + path[_i + 1][1] + " " + path[_i + 1][1] + " " + path[_i + 2][2] + " " + path[_i + 2][2];
+                    pathStr += "C " + path[_i + 0][0] + " " + path[_i + 0][1] + " " + path[_i + 1][0] + " " + path[_i + 1][1] + " " + path[_i + 2][0] + " " + path[_i + 2][1];
                 }
             }
 

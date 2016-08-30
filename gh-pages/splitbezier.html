@@ -15,9 +15,14 @@ let splinePnts = GeomUtil.cspline(pnts,.02);
 <div class="diagram"><!-- The SVG diagram will be appended here --></div>
 
 <form onsubmit="refresh(); return false;">
-    <li>
-        <button>Randomize</button>
-    </li>
+    <button>Randomize</button>
+
+    <select title="Control Point Edit Style">
+        <option selected>Mirrored</option>
+        <option>Disconnected</option>
+        <option>Asymmetric</option>
+    </select>
+
 </form>
 
 
@@ -25,37 +30,62 @@ let splinePnts = GeomUtil.cspline(pnts,.02);
 var WIDTH = 500; //The size of the SVG canvas
 var BORDER = 50; //Keep the points from being too close to the edges
 
-
-//Create a set of random points
-var pnts = [];
-for (let i=0; i < 4; i++) {
-    pnts.push( {
-        x:(WIDTH-BORDER*2)*Math.random() + BORDER,
-        y:(WIDTH-BORDER*2)*Math.random() + BORDER
-    } );
+function randomPoint() {
+    return [(WIDTH - BORDER * 2) * Math.random() + BORDER, (WIDTH - BORDER * 2) * Math.random() + BORDER];
 }
 
-var bezier = [{x:100,y:200},{x:100,y:100},{x:200,y:100},{x:200,y:200}];
+function randomPath(numPoints) {
+    var pnts = [];
+    for (var i=0; i < numPoints; i++) pnts.push( randomPoint() );
+    return pnts;
+}
 
+function randomBezier(numPoints) {
+    var pnts = randomPath(numPoints);
 
-//Create the spline
-//var spline = GeomUtil.splitBezierXY(pnts,.02);
+    var bezier = [pnts[0]];
+
+    for (var i=0; i < pnts.length-1; i++) {
+
+        //Add the first control point
+        var p = pnts[i];
+        var cp = pnts[i-1];
+        if (cp == null) {
+            bezier.push( randomPoint() );
+        } else {
+            var rot = GeomUtil.rotate(cp[0],cp[1],180,p[0],p[1]);
+            bezier.push( rot );
+        }
+
+        //Add the second control point
+        bezier.push( randomPoint() );
+
+        //Add the next point
+        bezier.push(pnts[i+1]);
+
+    }
+
+    return bezier;
+}
 
 var mainSVG = null;
 
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+
 function refresh() {
+
+    var bezier = randomBezier(2);
+
     //Remove what was there before
     if (mainSVG != null) mainSVG.parentElement.removeChild(mainSVG);
-
 
     //Create an SVG document
     mainSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     mainSVG.setAttribute("width", WIDTH.toString());
     mainSVG.setAttribute("height", WIDTH.toString());
     document.getElementsByClassName("diagram")[0].appendChild(mainSVG);
-
 
     //Convert a spline to an SVG path
     var pathSVG = SvgUtil.curve(document, bezier);
@@ -73,10 +103,10 @@ function refresh() {
     //pathSVG.querySelector('[data-id=1]');
     //[data-point-id="7febe088-4eca-493b-8455-385b39ad30e3"]
 
-
 }
 
-    refresh();
+refresh();
+
 </script>
 
 
