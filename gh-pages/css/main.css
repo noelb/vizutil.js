@@ -65,6 +65,7 @@ pre {
     padding: 32px;
     margin: 32pt 0 0 0;
     background-color: #f4f4f4;
+    white-space:pre-line;
 }
 
 
@@ -84,6 +85,8 @@ a, a:visited, a:hover {
     background-color: white;
     border: 1px solid black;
     display: inline-block;
+
+    cursor:default;
 }
 
 
@@ -96,8 +99,8 @@ footer {
 
 
 form {
+    font-size: 10.5pt;
 
-    font-size: 8pt;
 }
 
 form > * {
@@ -107,10 +110,16 @@ form > * {
 
 form label {
     margin-bottom: -5px;
+
 }
-/*form li {*/
-    /*padding: 10px 0 0 0;*/
-/*}*/
+
+form > .range > output {
+    float:right;
+}
+
+form li {
+    padding: 10px 0 0 0;
+}
 
 
 form button {
@@ -136,4 +145,36 @@ form button:active {
     background: #00ead9;
     border: solid 1px rgba(0,0,0,.2);
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+.vizutil-cp-line {
+    stroke:black;
+    stroke-opacity:.5;
+    stroke-width: .5;
+    stroke-dasharray: 2,2;
+}
+
+.vizutil-cp-circle {
+    stroke:#00eedd;
+    stroke-opacity:1;
+    stroke-width: .5px;
+    fill: #ffffff;
+    fill-opacity: 1;
+}
+
+.vizutil-path {
+    stroke:gray;
+    stroke-opacity:1;
+    stroke-width: .5px;
+    fill: none;
+}
+
+.vizutil-cross {
+    stroke:black;
+    stroke-opacity:1;
+    stroke-width: .5px;
+    fill: none;
 }

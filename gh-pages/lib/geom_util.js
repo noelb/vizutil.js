@@ -40,7 +40,7 @@ var GeomUtil = function () {
     }, {
         key: "toCart",
         value: function toCart(r, theta) {
-            var xy = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+            var xy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
             if (xy) return { x: r * Math.cos(theta), y: r * Math.sin(theta) };else return [r * Math.cos(theta), r * Math.sin(theta)];
         }
@@ -73,23 +73,30 @@ var GeomUtil = function () {
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+        /**
+         * Returns the distance between the two points
+         *
+         * @param x0
+         * @param y0
+         * @param x1
+         * @param y1
+         * @returns {number}
+         */
+
     }, {
         key: "distance",
         value: function distance(x0, y0) {
-            var x1 = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-            var y1 = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+            var x1 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+            var y1 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 
             var x = x1 - x0;
             var y = y1 - y0;
             return Math.sqrt(x * x + y * y);
         }
-    }, {
-        key: "distanceXY",
-        value: function distanceXY(p0) {
-            var p1 = arguments.length <= 1 || arguments[1] === undefined ? { x: 0, y: 0 } : arguments[1];
 
-            return GeomUtil.distance(p0.x, p0.y, p1.x, p1.y);
-        }
+        // static distanceXY(p0, p1={x:0,y:0}) {
+        //     return GeomUtil.distance(p0.x,p0.y,p1.x,p1.y);
+        // }
 
         /**
          *
@@ -100,25 +107,11 @@ var GeomUtil = function () {
     }, {
         key: "distancePath",
         value: function distancePath(path) {
-            var distance = 0;
-            for (var i = 0; i < path.length - 4; i += 2) {
-                distance += GeomUtil.distance(path[i], path[i + 1], path[i + 2], path[i + 3]);
-            }
-            return distance;
-        }
+            var xy = "x" in pnts[0];
 
-        /**
-         *
-         * @param path An array of objects that have "x" and "y" properties
-         * @returns {number}
-         */
-
-    }, {
-        key: "distancePathXY",
-        value: function distancePathXY(path) {
             var distance = 0;
             for (var i = 0; i < path.length - 1; i += 1) {
-                distance += GeomUtil.distance(path[i].x, path[i].y, path[i + 1].x, path[i + 1].y);
+                if (xy) distance += GeomUtil.distance(path[i].x, path[i].y, path[i + 1].x, path[i + 1].y);else distance += GeomUtil.distance(path[i][0], path[i][1], path[i + 1][0], path[i + 1][1]);
             }
             return distance;
         }
@@ -141,8 +134,8 @@ var GeomUtil = function () {
     }, {
         key: "intersect",
         value: function intersect(a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y) {
-            var segment = arguments.length <= 8 || arguments[8] === undefined ? true : arguments[8];
-            var xy = arguments.length <= 9 || arguments[9] === undefined ? false : arguments[9];
+            var segment = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
+            var xy = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
 
 
             //calculate directional constants
@@ -236,20 +229,15 @@ var GeomUtil = function () {
 
     }, {
         key: "interpolate",
-        value: function interpolate(x0, y0, x1, y1, percent) {
-            return [x0 + (x1 - x0) * percent, y0 + (y1 - y0) * percent];
-        }
-    }, {
-        key: "interpolateXY",
-        value: function interpolateXY(p0, p1) {
-            var percent = arguments.length <= 2 || arguments[2] === undefined ? .5 : arguments[2];
+        value: function interpolate(x0, y0, x1, y1) {
+            var percent = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : .5;
 
-            return { x: p0.x + (p1.x - p0.x) * percent, y: p0.y + (p1.y - p0.y) * percent };
+            return [x0 + (x1 - x0) * percent, y0 + (y1 - y0) * percent];
         }
 
         /**
          * Returns a point that x "percent" along a path
-         *
+         *-FIX ME!- This current assumes an array of consecutive values, not a nested array of points
          * @param path
          * @param percent
          * @returns {*[]}
@@ -291,15 +279,115 @@ var GeomUtil = function () {
     }, {
         key: "rotate",
         value: function rotate(x, y, angleInRadians) {
-            var originX = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
-            var originY = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
+            var originX = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+            var originY = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+            var xy = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
 
             var rotatedX = Math.cos(angleInRadians) * (x - originX) - Math.sin(angleInRadians) * (y - originY) + originX;
             var rotatedY = Math.sin(angleInRadians) * (x - originX) + Math.cos(angleInRadians) * (y - originY) + originY;
-            return [rotatedX, rotatedY];
+            return xy ? { x: rotatedX, y: rotatedY } : [rotatedX, rotatedY];
         }
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+        /* https://gist.github.com/mbostock/8027637 */
+        // getTotalLength
+        // getPointAtLength
+        //
+        // static closestPoint2(pathNode, point) {
+        //
+        //     var distance2 = function(p) {
+        //         var dx = p.x - point[0],
+        //             dy = p.y - point[1];
+        //         return dx * dx + dy * dy;
+        //     }
+        //
+        //     var pathLength = pathNode.getTotalLength(),
+        //         precision = 8,
+        //         best,
+        //         bestLength,
+        //         bestDistance = Infinity;
+        //
+        //     // linear scan for coarse approximation
+        //     for (var scan, scanLength = 0, scanDistance; scanLength <= pathLength; scanLength += precision) {
+        //         if ((scanDistance = distance2(scan = pathNode.getPointAtLength(scanLength))) < bestDistance) {
+        //             best = scan, bestLength = scanLength, bestDistance = scanDistance;
+        //         }
+        //     }
+        //
+        //     // binary search for precise estimate
+        //     precision /= 2;
+        //     while (precision > 0.5) {
+        //         var before,
+        //             after,
+        //             beforeLength,
+        //             afterLength,
+        //             beforeDistance,
+        //             afterDistance;
+        //         if ((beforeLength = bestLength - precision) >= 0 && (beforeDistance = distance2(before = pathNode.getPointAtLength(beforeLength))) < bestDistance) {
+        //             best = before, bestLength = beforeLength, bestDistance = beforeDistance;
+        //         } else if ((afterLength = bestLength + precision) <= pathLength && (afterDistance = distance2(after = pathNode.getPointAtLength(afterLength))) < bestDistance) {
+        //             best = after, bestLength = afterLength, bestDistance = afterDistance;
+        //         } else {
+        //             precision /= 2;
+        //         }
+        //     }
+        //
+        //     best = [best.x, best.y];
+        //     best.distance = Math.sqrt(bestDistance);
+        //     return best;
+        //
+        // }
+
+
+        /**
+         *
+         * Credit:
+         * https://gist.github.com/mbostock/8027637
+         *
+         * @param pathNode {SVGPathElement}
+         *
+         */
+
+    }, {
+        key: "closestPoint",
+        value: function closestPoint(pathNode, point) {
+
+            var distance2 = function distance2(p) {
+                var dx = p.x - point[0],
+                    dy = p.y - point[1];
+                return dx * dx + dy * dy;
+            };
+
+            var pathLength = pathNode.getTotalLength(),
+                precision = 8,
+                best,
+                bestLength,
+                bestDistance = Infinity;
+
+            // linear scan for coarse approximation
+            for (var scan, scanLength = 0, scanDistance; scanLength <= pathLength; scanLength += precision) {
+                if ((scanDistance = distance2(scan = pathNode.getPointAtLength(scanLength))) < bestDistance) {
+                    best = scan, bestLength = scanLength, bestDistance = scanDistance;
+                }
+            }
+
+            // binary search for precise estimate
+            precision /= 2;
+            while (precision > 0.5) {
+                var before, after, beforeLength, afterLength, beforeDistance, afterDistance;
+                if ((beforeLength = bestLength - precision) >= 0 && (beforeDistance = distance2(before = pathNode.getPointAtLength(beforeLength))) < bestDistance) {
+                    best = before, bestLength = beforeLength, bestDistance = beforeDistance;
+                } else if ((afterLength = bestLength + precision) <= pathLength && (afterDistance = distance2(after = pathNode.getPointAtLength(afterLength))) < bestDistance) {
+                    best = after, bestLength = afterLength, bestDistance = afterDistance;
+                } else {
+                    precision /= 2;
+                }
+            }
+
+            best = [best.x, best.y];
+            best.distance = Math.sqrt(bestDistance);
+            return best;
+        }
 
         /**
          * Bernstein's Polynomials
@@ -314,12 +402,15 @@ var GeomUtil = function () {
          * @param cy2
          * @param x3
          * @param y3
-         * @returns {{x: number, y: number}}
+         *
+         * @returns { {x: number, y: number} | [Number,Number] }
          */
 
     }, {
         key: "getOnBezier",
         value: function getOnBezier(percent, x0, y0, cx1, cy1, cx2, cy2, x3, y3) {
+            var xy = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : false;
+
             function b1(t) {
                 return t * t * t;
             }
@@ -332,26 +423,13 @@ var GeomUtil = function () {
             function b4(t) {
                 return (1 - t) * (1 - t) * (1 - t);
             }
-            return [x0 * b1(percent) + cx1 * b2(percent) + cx2 * b3(percent) + x3 * b4(percent), y0 * b1(percent) + cy1 * b2(percent) + cy2 * b3(percent) + y3 * b4(percent)];
-        }
+            var pnt = [x0 * b1(percent) + cx1 * b2(percent) + cx2 * b3(percent) + x3 * b4(percent), y0 * b1(percent) + cy1 * b2(percent) + cy2 * b3(percent) + y3 * b4(percent)];
 
-        /**
-         * Bernstein's Polynomials
-         * http://iscriptdesign.com/?sketch=tutorial/splitbezier
-         *
-         * @param percent
-         * @param p1
-         * @param cp1
-         * @param cp2
-         * @param p2
-         * @returns {{x: number, y: number}}
-         */
-
-    }, {
-        key: "getOnBezierXY",
-        value: function getOnBezierXY(percent, p1, cp1, cp2, p2) {
-            var pnt = GeomUtil.getOnBezier(percent, p1.x, p1.y, cp1.x, cp1.y, cp2.x, cp2.y, p2.x, p2.y);
-            return { x: pnt[0], y: pnt[1] };
+            if (xy) {
+                return { x: pnt[0], y: pnt[1] };
+            } else {
+                return pnt;
+            }
         }
 
         /**
@@ -405,17 +483,15 @@ var GeomUtil = function () {
         /**
          * Used by Catmull-Rom Spline
          *
-         * @param pk1
-         * @param pk_1
          * @returns {{x: number, y: number}}
          */
 
     }, {
         key: "tangent",
-        value: function tangent(pk1, pk_1) {
+        value: function tangent(px, py, _px, _py) {
             return {
-                x: (pk1.x - pk_1.x) / 2,
-                y: (pk1.y - pk_1.y) / 2
+                x: (px - _px) / 2,
+                y: (py - _py) / 2
             };
         }
 
@@ -427,38 +503,45 @@ var GeomUtil = function () {
          *
          * Ported w/ modifications from: http://actionsnippet.com/?p=1042
          *
-         * @param pnts An array of points to draw a curve through
-         * @param res A number between 0-1 (0=Infinite,.1=10 segments,.2=5segments,etc.)
+         * @param path An array of points to draw a curve through
+         * @param segments A number great than 1. The number of segments to build the curve out of.
          * @returns {Array} The path
          *
          */
 
     }, {
-        key: "csplineXY",
-        value: function csplineXY(pnts) {
-            var res = arguments.length <= 1 || arguments[1] === undefined ? .1 : arguments[1];
+        key: "cspline",
+        value: function cspline(path) {
+            var segments = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
 
+            var xy = "x" in path[0];
+
+            var res = 1 / segments; //Convert segments into resolution steps
 
             var spline = [];
 
             var px = 0;
             var py = 0;
-            var end = pnts.length - 1;
+            var end = path.length - 1;
 
-            var m = [GeomUtil.tangent(pnts[1], pnts[0])];
+            var m = [];
+            m[0] = xy ? GeomUtil.tangent(path[1].x, path[1].y, path[0].x, path[0].y) : GeomUtil.tangent(path[1][0], path[1][1], path[0][0], path[0][1]);
             for (var i = 1; i < end; i++) {
-                m[i] = GeomUtil.tangent(pnts[i + 1], pnts[i - 1]);
+                m[i] = xy ? GeomUtil.tangent(path[i + 1].x, path[i + 1].y, path[i - 1].x, path[i - 1].y) : GeomUtil.tangent(path[i + 1][0], path[i + 1][1], path[i - 1][0], path[i - 1][1]);
             }
-            m[end] = GeomUtil.tangent(pnts[end], pnts[end - 1]);
+            m[end] = xy ? GeomUtil.tangent(path[end].x, path[end].y, path[end - 1].x, path[end - 1].y) : GeomUtil.tangent(path[end][0], path[end][1], path[end - 1][0], path[end - 1][1]);
 
             for (var k = 0; k < end; k++) {
                 var k1 = k + 1;
-                var pk = pnts[k];
-                var pk1 = pnts[k1];
+                var pkx = xy ? path[k].x : path[k][0];
+                var pky = xy ? path[k].y : path[k][1];
+                var pk1x = xy ? path[k1].x : path[k1][0];
+                var pk1y = xy ? path[k1].y : path[k1][1];
+
                 var mk = m[k];
                 var mk1 = m[k1];
 
-                for (var t = 0; t < 1; t += res) {
+                for (var t = 0; t <= 1; t += res) {
                     var t_2 = t * t;
                     var _1_t = 1 - t;
                     var _2t = 2 * t;
@@ -467,9 +550,10 @@ var GeomUtil = function () {
                     var h01 = t_2 * (3 - _2t);
                     var h11 = t_2 * (t - 1);
 
-                    px = h00 * pk.x + h10 * mk.x + h01 * pk1.x + h11 * mk1.x;
-                    py = h00 * pk.y + h10 * mk.y + h01 * pk1.y + h11 * mk1.y;
-                    spline.push({ x: px, y: py });
+                    px = h00 * pkx + h10 * mk.x + h01 * pk1x + h11 * mk1.x;
+                    py = h00 * pky + h10 * mk.y + h01 * pk1y + h11 * mk1.y;
+
+                    if (xy) spline.push({ x: px, y: py });else spline.push([px, py]);
                 }
             }
 

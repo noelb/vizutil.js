@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Install babel:
 # npm install --global babel-cli
 

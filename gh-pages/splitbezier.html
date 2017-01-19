@@ -3,6 +3,41 @@ layout: default
 title: Split Bezier
 ---
 
+
+<style>
+
+
+    .vizutil-cp-line {
+        stroke:black;
+        stroke-opacity:.5;
+        stroke-width: .5;
+        stroke-dasharray: 2,2;
+    }
+
+    .vizutil-cp-circle {
+        stroke:#00eedd;
+        stroke-opacity:1;
+        stroke-width: .5px;
+        fill: #ffffff;
+        fill-opacity: 1;
+    }
+
+    .vizutil-path {
+        stroke:gray;
+        stroke-opacity:1;
+        stroke-width: .5px;
+        fill: none;
+    }
+
+    .vizutil-cross {
+        stroke:black;
+        stroke-opacity:1;
+        stroke-width: .5px;
+        fill: none;
+    }
+
+</style>
+
 <pre>
 //The points you want to draw a curve through
 let pnts = [ {x:0,y:0}, {x:23,y:-4}, ... ];
@@ -14,7 +49,7 @@ let splinePnts = GeomUtil.cspline(pnts,.02);
 
 <div class="diagram"><!-- The SVG diagram will be appended here --></div>
 
-<form onsubmit="refresh(); return false;">
+<form onsubmit="paths = [Util.randomSVGPath()]; redraw(); return false;">
     <button>Randomize</button>
 
     <select title="Control Point Edit Style">
@@ -27,85 +62,84 @@ let splinePnts = GeomUtil.cspline(pnts,.02);
 
 
 <script>
-var WIDTH = 500; //The size of the SVG canvas
-var BORDER = 50; //Keep the points from being too close to the edges
 
-function randomPoint() {
-    return [(WIDTH - BORDER * 2) * Math.random() + BORDER, (WIDTH - BORDER * 2) * Math.random() + BORDER];
-}
-
-function randomPath(numPoints) {
-    var pnts = [];
-    for (var i=0; i < numPoints; i++) pnts.push( randomPoint() );
-    return pnts;
-}
-
-function randomBezier(numPoints) {
-    var pnts = randomPath(numPoints);
-
-    var bezier = [pnts[0]];
-
-    for (var i=0; i < pnts.length-1; i++) {
-
-        //Add the first control point
-        var p = pnts[i];
-        var cp = pnts[i-1];
-        if (cp == null) {
-            bezier.push( randomPoint() );
-        } else {
-            var rot = GeomUtil.rotate(cp[0],cp[1],180,p[0],p[1]);
-            bezier.push( rot );
-        }
-
-        //Add the second control point
-        bezier.push( randomPoint() );
-
-        //Add the next point
-        bezier.push(pnts[i+1]);
-
-    }
-
-    return bezier;
-}
-
+var diagram = document.getElementsByClassName("diagram")[0];
 var mainSVG = null;
+
+var paths = [Util.randomSVGPath()];
+
+var sliceStart = null;
+var sliceEnd = null;
+var sliceStartX = null;
+var sliceEndX = null;
+var slicePath = null;
+
+var target = [Util.WIDTH/2,Util.WIDTH/2];
+
+
+Util.onMouse(diagram,
+    function(event) {
+        sliceStart = Util.getMousePos(diagram,event);
+        sliceEnd = [sliceStart[0],sliceStart[1]];
+        redraw();
+    }, function(event) {
+        sliceEnd = Util.getMousePos(diagram,event);
+        redraw();
+    },function(event) {
+        sliceStart = null;
+        sliceEnd = null;
+        redraw();
+    }
+);
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 
-function refresh() {
-
-    var bezier = randomBezier(2);
+function redraw() {
 
     //Remove what was there before
     if (mainSVG != null) mainSVG.parentElement.removeChild(mainSVG);
-
-    //Create an SVG document
     mainSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    mainSVG.setAttribute("width", WIDTH.toString());
-    mainSVG.setAttribute("height", WIDTH.toString());
-    document.getElementsByClassName("diagram")[0].appendChild(mainSVG);
+    mainSVG.setAttribute("width", Util.WIDTH.toString());
+    mainSVG.setAttribute("height", Util.WIDTH.toString());
+    diagram.appendChild(mainSVG);
+
 
     //Convert a spline to an SVG path
-    var pathSVG = SvgUtil.curve(document, bezier);
-    console.log(pathSVG);
-    pathSVG.setAttribute("stroke", "black");
-    pathSVG.setAttribute("stroke-width", ".5");
-    pathSVG.setAttribute("opacity", ".2");
-    pathSVG.setAttribute("fill", "none");
-    mainSVG.appendChild(pathSVG);
+    for (var i=0; i < paths.length; i++) {
+        mainSVG.appendChild(paths[i]);
+    }
 
-    var editSVG = SvgUtil.editControls(document,bezier,pathSVG);
-    mainSVG.appendChild(editSVG);
+    if (sliceStart != null) {
 
-    //pathSVG.querySelector('[data-id=0]');
-    //pathSVG.querySelector('[data-id=1]');
-    //[data-point-id="7febe088-4eca-493b-8455-385b39ad30e3"]
+        //Draw a line from the target to the closest point
+        slicePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        slicePath.setAttribute("d",
+                "M " + sliceStart[0] + " " + sliceStart[1] + " " +
+                "L " + sliceEnd[0] + " " + sliceEnd[1]
+        );
+        slicePath.classList.add("vizutil-cp-line");
+        mainSVG.appendChild(slicePath);
+
+        //Draw a cross at the target point
+        sliceStartX = SvgUtil.getCross(document, sliceStart[0], sliceStart[1]);
+        mainSVG.appendChild(sliceStartX);
+
+        //Draw a cross at the closest point
+        sliceEndX = SvgUtil.getCross(document, sliceEnd[0], sliceEnd[1]);
+        mainSVG.appendChild(sliceEndX);
+
+    }
+
+//
+//    var editSVG = SvgUtil.editControls(document,bezier,pathSVG);
+//    mainSVG.appendChild(editSVG);
+
 
 }
 
-refresh();
+redraw();
 
 </script>
 

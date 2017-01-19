@@ -4,6 +4,7 @@
  */
 class SvgUtil {
 
+
     /**
      *
      * Get's the top-most SVG element of this element
@@ -49,15 +50,22 @@ class SvgUtil {
      * @private
      */
     static _controlBar(document,pathSVG,path,controlIndex,pointIndex) {
+
         let isXY = "x" in path[0];
 
         let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        line.setAttribute("stroke","#ff0000");
-        line.setAttribute("stroke-dasharray", "2,2");
+        line.classList.add("vizutil-cp-line");
+        //line.setAttribute("stroke",style.strokeColor);
+        //line.setAttribute("stroke-opacity",style.strokeOpacity)
+        //line.setAttribute("stroke-dasharray", "2,2");
 
         let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        circle.setAttribute("r", "5");
-        circle.setAttribute("fill", "#ff0000");
+        circle.setAttribute("r", "3");
+        circle.classList.add("vizutil-cp-circle");
+        //circle.setAttribute("stroke",style.strokeColor);
+        //circle.setAttribute("stroke-opacity",style.strokeOpacity)
+        //circle.setAttribute("fill", style.fillColor);
+        //circle.setAttribute("fill-opacity", style.fillOpacity);
 
         if (isXY) {
             line.setAttribute("x1", path[controlIndex].x);
@@ -66,6 +74,13 @@ class SvgUtil {
             line.setAttribute("y2", path[pointIndex].y);
             circle.setAttribute("cx", path[controlIndex].x);
             circle.setAttribute("cy", path[controlIndex].y);
+        } else {
+            line.setAttribute("x1", path[controlIndex][0]);
+            line.setAttribute("y1", path[controlIndex][1]);
+            line.setAttribute("x2", path[pointIndex][0]);
+            line.setAttribute("y2", path[pointIndex][1]);
+            circle.setAttribute("cx", path[controlIndex][0]);
+            circle.setAttribute("cy", path[controlIndex][1]);
         }
 
         let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -73,9 +88,8 @@ class SvgUtil {
         group.appendChild(line);
         group.appendChild(circle);
 
-        /* HANDLE MOUSE EVENTS */
+        /* CREATE INTERACTION HANDLERS */
         let downHandler, upHandler, moveHandler;
-
         moveHandler = (e) => {
             let pnt = SvgUtil._mousePos( SvgUtil._getRootSVG(group), e );
 
@@ -86,8 +100,14 @@ class SvgUtil {
             line.setAttribute("y1",pnt.y);
 
             //Update the path
-            path[controlIndex].x = pnt.x;
-            path[controlIndex].y = pnt.y;
+            if (isXY) {
+                path[controlIndex].x = pnt.x;
+                path[controlIndex].y = pnt.y;
+            } else {
+                path[controlIndex][0] = pnt.x;
+                path[controlIndex][1] = pnt.y;
+            }
+
             SvgUtil.curve(document,path,null,pathSVG);
         };
         downHandler = () => {
@@ -99,6 +119,8 @@ class SvgUtil {
             document.removeEventListener("mousemove",upHandler);
             document.removeEventListener("mousemove",moveHandler);
         };
+
+        //LISTEN FOR CIRCLE CLICKS
         circle.addEventListener("mousedown",downHandler);
 
 
@@ -108,6 +130,7 @@ class SvgUtil {
 
 
     static editControls(document,path,pathSVG) {
+
 
         let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
@@ -161,6 +184,7 @@ class SvgUtil {
 
         let pathSVG = (target) ? target : document.createElementNS("http://www.w3.org/2000/svg", "path");
         pathSVG.setAttribute("d", pathStr);
+        pathSVG.classList.add("vizutil-path");
 
         return pathSVG;
 
@@ -176,6 +200,7 @@ class SvgUtil {
             "L " + (x + size) + " " + (y - size)
         );
         path.setAttribute("fill", "none");
+        path.classList.add("vizutil-cross");
         return path;
     }
 

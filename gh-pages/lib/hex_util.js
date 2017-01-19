@@ -6,8 +6,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var HexUtil = function () {
     function HexUtil() {
-        var hexLength = arguments.length <= 0 || arguments[0] === undefined ? 40 : arguments[0];
-        var pixelSize = arguments.length <= 1 || arguments[1] === undefined ? 10 : arguments[1];
+        var hexLength = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 40;
+        var pixelSize = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
 
         _classCallCheck(this, HexUtil);
 

@@ -13,9 +13,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * These were copy and pasted out of an old project,
  * but were probably ported from google. Will reconfirm, in the meantime, the google
- * license from android is also included at the bottom of this file:
+ * license is below:
  * https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android
  *
+ */
+
+/*
+ * Copyright 2013 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 var GeoUtil = function () {
     function GeoUtil() {
@@ -90,19 +106,3 @@ var GeoUtil = function () {
 
     return GeoUtil;
 }();
-
-/*
- * Copyright 2013 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
