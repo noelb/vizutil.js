@@ -1,0 +1,141 @@
+---
+layout: default
+title: Line Intersection
+---
+
+<p>
+Find the intersection between two different line segments.
+</p>
+
+
+<pre>
+// YOU CAN CHOOSE RESPONSE FORMAT
+
+// Two lines that cross each other
+var line0 = [ {x:0,y:0}, {x:100,y:100} ] ;
+var line1 = [ {x:100,y:0}, {x:0,y:100} ] ;
+
+// inter = [50,50]
+var inter = GeomUtil.intersect(
+    line0[0].x,line0[0].y,line0[1].x,line0[1].y, //First line
+    line1[0].x,line1[0].y,line1[1].x,line1[1].y  //Second line
+    );
+
+// interXY = {x:50,y:50}
+var interXY = GeomUtil.intersect(
+    line0[0].x,line0[0].y,line0[1].x,line0[1].y, //First line
+    line1[0].x,line1[0].y,line1[1].x,line1[1].y, //Second line
+    null,true);
+</pre>
+
+<pre>
+// YOU CAN DECIDE IF YOU WANT INTERSECTIONS
+// OUTSIDE THE BOUNDS OF THE SEGMENT
+
+// Two lines that would cross each other if extended
+var line0 = [ {x:0,y:0}, {x:10,y:10} ] ;
+var line1 = [ {x:100,y:0}, {x:90,y:10} ] ;
+
+// The segments don't cross, so return null
+// test0 = null
+var test0 = GeomUtil.intersect(
+    line0[0].x,line0[0].y,line0[1].x,line0[1].y, //First line
+    line1[0].x,line1[0].y,line1[1].x,line1[1].y //Second line
+    );
+
+// The same segments, but show me where they intersect if infinite
+// test1 = [50,50]
+var test1 = GeomUtil.intersect(
+    line0[0].x,line0[0].y,line0[1].x,line0[1].y, //First line
+    line1[0].x,line1[0].y,line1[1].x,line1[1].y, //Second line
+    false);
+</pre>
+
+<div class="diagram">
+    <!-- The SVG diagram will be appended here -->
+</div>
+
+<form onsubmit="refresh(); return false;">
+    <li>
+        <input id="segmentFlag" type="checkbox" name="segmentFlag" checked="true"/> <label for="segmentFlag">Must be on segment</label><br/>
+    </li>
+    <li>
+        <button>Randomize</button><br/>
+    </li>
+</form>
+
+<script>
+
+const WIDTH = 500; //The size of the SVG canvas
+const BORDER = 50; //Keep the points from being too close to the edges
+const NUM_LINES = 10;
+
+function randomPoint() {
+    return [(WIDTH - BORDER * 2) * Math.random() + BORDER, (WIDTH - BORDER * 2) * Math.random() + BORDER];
+}
+function randomLine() {
+    return [randomPoint(),randomPoint()];
+}
+
+
+var mainSVG = null;
+
+function refresh() {
+
+    //Remove what was there before
+    if (mainSVG != null) mainSVG.parentElement.removeChild(mainSVG);
+
+    //Create a set of lines
+    var lines = [];
+    for (var i = 0; i < NUM_LINES; i++) {
+        lines.push(randomLine());
+    }
+
+    //Find their intersections
+    var intersections = [];
+    for (var i=0; i < lines.length-1; i++) {
+        for (var j=i+1; j < lines.length; j++) {
+            var intersect = GeomUtil.intersect(
+                    lines[i][0][0],lines[i][0][1],
+                    lines[i][1][0],lines[i][1][1],
+                    lines[j][0][0],lines[j][0][1],
+                    lines[j][1][0],lines[j][1][1],
+                    document.getElementById("segmentFlag").checked
+                    );
+            if (intersect != null) intersections.push(intersect);
+        }
+
+    }
+
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+    //Create an SVG document
+    mainSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    mainSVG.setAttribute("width", WIDTH.toString());
+    mainSVG.setAttribute("height", WIDTH.toString());
+    document.getElementsByClassName("diagram")[0].appendChild(mainSVG);
+
+    for (var i=0; i < lines.length; i++) {
+        var path = SvgUtil.getPath(document, lines[i]);
+        path.setAttribute("stroke", "black");
+        path.setAttribute("stroke-width", ".5");
+        path.setAttribute("opacity", ".2");
+        path.setAttribute("fill", "none");
+        mainSVG.appendChild(path);
+    }
+
+
+    //Draw an "X" for every intersection point
+    for (var i = 0; i < intersections.length; i++) {
+        var path = SvgUtil.getCross(document,intersections[i][0],intersections[i][1]);
+        path.setAttribute("stroke", "black");
+        path.setAttribute("stroke-width", ".5");
+        mainSVG.appendChild(path);
+    }
+}
+
+refresh();
+
+</script>

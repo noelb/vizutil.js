@@ -1,0 +1,108 @@
+---
+layout: default
+title: Catmull-Rom Spline
+---
+
+
+
+<p>
+    Catmull-Rom splines allow you to draw a smooth curve through a series of points, something that's fairly difficult
+    to achieve with beziers. Read more: <a href="https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline">Wikipedia</a>
+</p>
+
+<p>
+    Trivia: <a href="https://en.wikipedia.org/wiki/Edwin_Catmull">Ed Catmull</a>, one of the founders of Pixar, was co-inventor and one of the namesakes of Catmull-Rom splines.
+</p>
+
+
+
+<pre>
+//The points you want to draw a curve through
+var pnts = [ {x:0,y:0}, {x:23,y:-4}, ... ];
+
+//Will return an array of points forming a path
+var splinePnts = GeomUtil.cspline(pnts,.02);
+</pre>
+
+
+
+<div class="diagram">
+    <!-- The SVG diagram will be appended here -->
+</div>
+
+
+
+
+<form onsubmit="redraw(segments,Util.randomPath(10)); return false;">
+
+    <li class="range">
+        <label for="rangeinput">Segments</label>
+        <output id="rangevalue">10</output>
+        <input id="rangeinput" type="range" min="1" max="25" step="1" value="10" oninput="redraw(value,points)" onchange="redraw(value,points)"/>
+    </li>
+
+    <li>
+        <button>Randomize</button><br/>
+    </li>
+
+</form>
+
+
+
+<script>
+var segments = 10;
+var points = Util.randomPath(10);
+var mainSVG = null;
+
+function redraw(segs,pnts) {
+    segments = Number(segs);
+    points = pnts;
+
+    if (mainSVG != null) mainSVG.parentElement.removeChild(mainSVG);
+
+    //Update the slide value
+    document.getElementById("rangevalue").value = segments;
+
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+    //Create the spline
+    var spline = GeomUtil.cspline(pnts, segments);
+
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+    //Create an SVG document
+    mainSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    mainSVG.setAttribute("width", Util.WIDTH.toString() );
+    mainSVG.setAttribute("height", Util.WIDTH.toString() );
+    document.getElementsByClassName("diagram")[0].appendChild(mainSVG);
+
+
+    //Convert a spline to an SVG path
+    var path = SvgUtil.getPath(document, spline);
+    path.setAttribute("stroke", "black");
+    path.setAttribute("stroke-width", ".5");
+    path.setAttribute("opacity", ".2");
+    path.setAttribute("fill", "none");
+    mainSVG.appendChild(path);
+
+
+    //Draw an "X" for every intersection point
+    for (var i = 0; i < pnts.length; i++) {
+        var path = SvgUtil.getCross(document,pnts[i][0],pnts[i][1],5);
+        path.setAttribute("stroke", "black");
+        path.setAttribute("stroke-width", ".5");
+        path.setAttribute("opacity", "1");
+        path.setAttribute("fill", "none");
+        mainSVG.appendChild(path);
+    }
+
+
+}
+
+redraw(segments,points);
+
+</script>
