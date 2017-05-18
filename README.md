@@ -17,8 +17,8 @@ A set of utility libraries for working with geometry in javascript.
 ## API Design
 
 This library avoids having numerous OOP constructs (rectangle class, path 
-class, etc.). While well designed OOP can help organize large libraries,
-it can also get messy when you stitch together a different libraries (e.g., 
+class, etc.). Well designed OOP can help organize large libraries,
+but it get messy when stitching together various libraries (e.g., 
 a physics and graphics engines can each have their own point, vector, path 
 objects, etc.)
 
