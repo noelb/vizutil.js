@@ -5,20 +5,20 @@ A set of utility libraries for working with geometry in javascript.
 
 ## Repository
 
+* docs - 
 * src - ECMA 6 javascript. This version of the code will work in latest version of chrome, 
 (probably) not so much in other browsers
 * lib - babel compiled version of src that should run in most browsers
-* gh-pages - src for the vizutil.js website (http://)and associated examples.
-    * gh-pages-push.sh - Publishes the vizutil.js demo site
-    * gh-pages-server.sh - Starts up a local server to test locally
+<!-- * gh-pages - src for the vizutil.js website (http://)and associated examples. -->
+    <!-- * gh-pages-push.sh - Publishes the vizutil.js demo site -->
+    <!-- * gh-pages-server.sh - Starts up a local server to test locally -->
 * build.sh - compiles the src to lib using babel for backwards compatibility
 
 
 ## API Design
 
 This library avoids having numerous OOP constructs (rectangle class, path 
-class, etc.). Well designed OOP can help organize large libraries,
-but it get messy when stitching together various libraries (e.g., 
+class, etc.) because it can get messy when stitching together various libraries (e.g., 
 a physics and graphics engines can each have their own point, vector, path 
 objects, etc.)
 
@@ -32,7 +32,7 @@ incorporating the whole family.
 
 The code base is written and maintained in ECMA 6. This means it will work in
 some current browsers, but if you want to run it in older ones, use the
-babel compiled files in the "lib" directory (which should just be vanilla JS).
+babel compiled files in the "lib" directory (which will just be vanilla JS).
 
 
 ## Point Objects
