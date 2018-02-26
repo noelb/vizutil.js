@@ -322,7 +322,7 @@ class GeomUtil {
             var dx = p.x - point[0],
                 dy = p.y - point[1];
             return dx * dx + dy * dy;
-        }
+        };
 
         var pathLength =
             pathNode.getTotalLength(),
@@ -454,12 +454,6 @@ class GeomUtil {
      *
      * @returns {{x: number, y: number}}
      */
-    static tangent(px,py,_px,_py) {
-        return {
-            x: (px - _px) / 2,
-            y: (py - _py) / 2
-        }
-    }
 
 
     /**
@@ -476,6 +470,15 @@ class GeomUtil {
      *
      */
     static cspline(path, segments=10) {
+
+        let tangent = function(px,py,_px,_py) {
+            return {
+                x: (px - _px) / 2,
+                y: (py - _py) / 2
+            }
+        };
+
+
         let xy = "x" in path[0];
 
         const res = 1/segments; //Convert segments into resolution steps
@@ -487,18 +490,18 @@ class GeomUtil {
         let end = path.length-1;
 
 
-        var m = [];
+        let m = [];
         m[0] = xy ?
-            GeomUtil.tangent( path[1].x, path[1].y, path[0].x, path[0].y ) :
-            GeomUtil.tangent( path[1][0], path[1][1], path[0][0], path[0][1] );
+            tangent( path[1].x, path[1].y, path[0].x, path[0].y ) :
+            tangent( path[1][0], path[1][1], path[0][0], path[0][1] );
         for (let i=1; i < end; i++) {
             m[i] = xy ?
-                GeomUtil.tangent( path[i+1].x, path[i+1].y, path[i-1].x, path[i-1].y ) :
-                GeomUtil.tangent( path[i+1][0], path[i+1][1], path[i-1][0], path[i-1][1] );
+                tangent( path[i+1].x, path[i+1].y, path[i-1].x, path[i-1].y ) :
+                tangent( path[i+1][0], path[i+1][1], path[i-1][0], path[i-1][1] );
         }
         m[end] = xy ?
-            GeomUtil.tangent( path[end].x, path[end].y, path[end-1].x, path[end-1].y ) :
-            GeomUtil.tangent( path[end][0], path[end][1], path[end-1][0], path[end-1][1] );
+            tangent( path[end].x, path[end].y, path[end-1].x, path[end-1].y ) :
+            tangent( path[end][0], path[end][1], path[end-1][0], path[end-1][1] );
 
         for (let k = 0; k <end; k++){
             var k1 = k + 1;

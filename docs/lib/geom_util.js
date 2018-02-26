@@ -486,15 +486,6 @@ var GeomUtil = function () {
          * @returns {{x: number, y: number}}
          */
 
-    }, {
-        key: "tangent",
-        value: function tangent(px, py, _px, _py) {
-            return {
-                x: (px - _px) / 2,
-                y: (py - _py) / 2
-            };
-        }
-
         /**
          *
          * Catmull-Rom Spline
@@ -514,6 +505,14 @@ var GeomUtil = function () {
         value: function cspline(path) {
             var segments = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
 
+
+            var tangent = function tangent(px, py, _px, _py) {
+                return {
+                    x: (px - _px) / 2,
+                    y: (py - _py) / 2
+                };
+            };
+
             var xy = "x" in path[0];
 
             var res = 1 / segments; //Convert segments into resolution steps
@@ -525,11 +524,11 @@ var GeomUtil = function () {
             var end = path.length - 1;
 
             var m = [];
-            m[0] = xy ? GeomUtil.tangent(path[1].x, path[1].y, path[0].x, path[0].y) : GeomUtil.tangent(path[1][0], path[1][1], path[0][0], path[0][1]);
+            m[0] = xy ? tangent(path[1].x, path[1].y, path[0].x, path[0].y) : tangent(path[1][0], path[1][1], path[0][0], path[0][1]);
             for (var i = 1; i < end; i++) {
-                m[i] = xy ? GeomUtil.tangent(path[i + 1].x, path[i + 1].y, path[i - 1].x, path[i - 1].y) : GeomUtil.tangent(path[i + 1][0], path[i + 1][1], path[i - 1][0], path[i - 1][1]);
+                m[i] = xy ? tangent(path[i + 1].x, path[i + 1].y, path[i - 1].x, path[i - 1].y) : tangent(path[i + 1][0], path[i + 1][1], path[i - 1][0], path[i - 1][1]);
             }
-            m[end] = xy ? GeomUtil.tangent(path[end].x, path[end].y, path[end - 1].x, path[end - 1].y) : GeomUtil.tangent(path[end][0], path[end][1], path[end - 1][0], path[end - 1][1]);
+            m[end] = xy ? tangent(path[end].x, path[end].y, path[end - 1].x, path[end - 1].y) : tangent(path[end][0], path[end][1], path[end - 1][0], path[end - 1][1]);
 
             for (var k = 0; k < end; k++) {
                 var k1 = k + 1;

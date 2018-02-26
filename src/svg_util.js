@@ -231,7 +231,7 @@ class SvgUtil {
     static getArrow(document, path, closed = false) {
         let pathStr = "";
         for (let i = 0; i < spline.length; i++) {
-            if (i == 0) pathStr += "M ";else pathStr += "L ";
+            if (i == 0) pathStr += "M "; else pathStr += "L ";
             pathStr += path[i].x + " " + path[i].y + " ";
         }
         if (closed) pathStr += "z";
