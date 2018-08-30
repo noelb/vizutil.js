@@ -8,12 +8,15 @@
     <meta property="og:description" content="{{ page.description }}" />
     <!--<meta property="og:image" content="http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg" />-->
 
-    <title>{{ page.title }}</title>
+    <title>{{ page.title }} </title>
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/slider.css" />
+    <link rel="stylesheet" href="{{ page.cssInclude }}" />
+
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800" rel="stylesheet">
     <script src="js/util.js"></script>
     <script src="lib/geo_util.js"></script>
+    <script src="lib/color_util.js"></script>
     <script src="lib/geom_util.js"></script>
     <script src="lib/hex_util.js"></script>
     <script src="lib/math_util.js"></script>
@@ -25,13 +28,22 @@
 <body>
 
 <nav>
-    <h1>vizutil.js</h1>
+    <h1><a href="index.html">vizutil.js</a></h1>
 
+    <h2>API</h2>
     <ul>
-        <li><a href="cspline.html">Catmull-Rom Spline</a></li>
-        <li><a href="nearbezier.html">Near Bezier</a></li>
-        <li><a href="intersect.html">Line Intersection</a></li>
-        <li><a href="splitbezier.html">Split Bezier</a></li>
+        <li><a href="api_geomutil.html">GeomUtil</a></li>
+        <li><a href="api_geoutil.html">GeoUtil</a></li>
+        <li><a href="api_mathutil.html">MathUtil</a></li>
+    </ul>
+
+    <h2>Demos</h2>
+    <ul>
+        <li><a href="geom_cspline.html">CSpline</a></li>
+        <li><a href="geom_nearbezier.html">Near Bezier</a></li>
+        <li><a href="geom_intersect.html">Line Intersection</a></li>
+        <li><a href="geom_splitbezier.html">Split Bezier</a></li>
+        <li><a href="math_randomnumgen.html">Random</a></li>
     </ul>
     <ul>
         <li><a href="https://github.com/noelb/vizutil.js">Github</a></li>
@@ -39,7 +51,7 @@
     </ul>
 </nav>
 
-<section>
+<section id="mainbody">
 <h1>{{ page.title }}</h1>
 <p>
 {{ content }}

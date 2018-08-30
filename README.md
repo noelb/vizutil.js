@@ -9,9 +9,6 @@ A set of utility libraries for working with geometry in javascript.
 * src - ECMA 6 javascript. This version of the code will work in latest version of chrome, 
 (probably) not so much in other browsers
 * lib - babel compiled version of src that should run in most browsers
-<!-- * gh-pages - src for the vizutil.js website (http://)and associated examples. -->
-    <!-- * gh-pages-push.sh - Publishes the vizutil.js demo site -->
-    <!-- * gh-pages-server.sh - Starts up a local server to test locally -->
 * build.sh - compiles the src to lib using babel for backwards compatibility
 
 
@@ -55,7 +52,7 @@ let mypoint = {x:123,y:567}
 
 ## Other (even more) excellent libraries
 
-If you like this library, you'll probably also find these libraries
-to be incredibly useful.
+If you like this library, you'll probably  find these libraries
+to be incredibly useful as well.
 * https://pomax.github.io/bezierjs/
 * https://github.com/jsplumb/jsBezier

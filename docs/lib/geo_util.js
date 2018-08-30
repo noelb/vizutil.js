@@ -10,10 +10,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * This class contains a bunch of static methods for working with lat/lng coordinates
  *
- *
- * These were copy and pasted out of an old project,
- * but were probably ported from google. Will reconfirm, in the meantime, the google
- * license is below:
+ * These were copy and pasted out of a very old project but were probably originally ported from google.
  * https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android
  *
  */
@@ -50,23 +47,35 @@ var GeoUtil = function () {
         }
     }, {
         key: "mercProject",
-        value: function mercProject(lat, lon, sizeX, sizeY) {
+        value: function mercProject(lat, lon) {
+            var sizeX = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+            var sizeY = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+            var xy = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+
             var sinLatitude = Math.sin(lat * Math.PI / 180);
-            var screenPnt = { x: 0, y: 0 };
-            screenPnt.x = (lon + 180) / 360 * sizeX;
-            screenPnt.y = (0.5 - Math.log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * Math.PI)) * sizeY;
-            return screenPnt;
+            var screenPnt = [];
+            screenPnt[0] = (lon + 180) / 360 * sizeX;
+            screenPnt[1] = (0.5 - Math.log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * Math.PI)) * sizeY;
+
+            if (xy) {
+                return { x: screenPnt[0], y: screenPnt[1] };
+            } else {
+                return screenPnt;
+            }
         }
     }, {
         key: "invMercProject",
-        value: function invMercProject(ptx, pty, sizeX, sizeY) {
+        value: function invMercProject(ptx, pty) {
+            var sizeX = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+            var sizeY = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+
             var x = ptx / sizeX;
             var y = pty / sizeY;
             x = x - .5;
             y = .5 - y;
             var lat = 90 - 360 * Math.atan(Math.exp(-y * 2 * Math.PI)) / Math.PI;
             var lon = 360 * x;
-            return { lat: lat, lon: lon };
+            return [lat, lon];
         }
     }, {
         key: "r",
@@ -75,31 +84,21 @@ var GeoUtil = function () {
         }
     }, {
         key: "distance",
-        value: function distance(geo1, geo2) {
-            var lat1 = geo1.lat;
-            var lat2 = geo2.lat;
-            var lon1 = geo1.lon;
-            var lon2 = geo2.lon;
-
-            var dLat = GeoUtil.toRad(lat2 - lat1); // Javascript functions in radians
-            var dLon = GeoUtil.toRad(lon2 - lon1);
-            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(GeoUtil.toRad(lat1)) * Math.cos(GeoUtil.toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        value: function distance(lat0, lon0, lat1, lon1) {
+            var dLat = GeoUtil.toRad(lat1 - lat0); // Javascript functions in radians
+            var dLon = GeoUtil.toRad(lon1 - lon0);
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(GeoUtil.toRad(lat0)) * Math.cos(GeoUtil.toRad(lat1)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return GeoUtil.r() * c; // Distance in km
         }
     }, {
         key: "bearing",
-        value: function bearing(geo1, geo2) {
-            var lat1 = geo1.lat;
-            var lat2 = geo2.lat;
-            var lon1 = geo1.lon;
-            var lon2 = geo2.lon;
+        value: function bearing(lat0, lon0, lat1, lon1) {
+            //let dLat = dnc.Geom.toRad(lat1-lat0);  // Javascript functions in radians
+            var dLon = GeoUtil.toRad(lon1 - lon0);
 
-            //let dLat = dnc.Geom.toRad(lat2-lat1);  // Javascript functions in radians
-            var dLon = GeoUtil.toRad(lon2 - lon1);
-
-            var y = Math.sin(dLon) * Math.cos(lat2);
-            var x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+            var y = Math.sin(dLon) * Math.cos(lat1);
+            var x = Math.cos(lat0) * Math.sin(lat1) - Math.sin(lat0) * Math.cos(lat1) * Math.cos(dLon);
             return Math.atan2(y, x).toDeg();
         }
     }]);

@@ -25,7 +25,7 @@ nav ul {
 }
 
 
-section {
+#mainbody {
     position: absolute;
     /* width: auto; */
     width: 500px;
@@ -39,7 +39,7 @@ header {
 }
 
 
-nav h1 {
+nav h1 a, nav h1 a:visited {
     color: #00eedd;
 }
 

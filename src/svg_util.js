@@ -190,6 +190,8 @@ class SvgUtil {
 
     }
 
+
+
     static getCross(document, x, y, size=5, closed = false) {
         size /= 2;
         let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -203,6 +205,51 @@ class SvgUtil {
         path.classList.add("vizutil-cross");
         return path;
     }
+
+
+
+    static getRect(document, x, y, width, height ) {
+        let path = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        path.setAttribute("x",x);
+        path.setAttribute("y",y);
+        path.setAttribute("width",width);
+        path.setAttribute("height",height);
+        path.classList.add("vizutil");
+        path.classList.add("vizutil-rect");
+        return path;
+    }
+
+
+
+    static getCircle(document, cx, cy, r) {
+        let path = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        path.setAttribute("cx",cx);
+        path.setAttribute("cy",cy);
+        path.setAttribute("r",r);
+        return path;
+    }
+
+
+
+    static getEllipse(document, cx, cy, rx, ry) {
+        let path = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+        path.setAttribute("cx",cx);
+        path.setAttribute("cy",cy);
+        path.setAttribute("rx",rx);
+        path.setAttribute("ry",ry);
+        return path;
+    }
+
+    static getStar(document, cx, cy, radiusInner, radiusOuter, numPoints) {
+        let path = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+        path.setAttribute("cx",cx);
+        path.setAttribute("cy",cy);
+        path.setAttribute("rx",rx);
+        path.setAttribute("ry",ry);
+        return path;
+    }
+
+
 
 
     static getPath(document, path, closed = false) {
@@ -228,10 +275,12 @@ class SvgUtil {
         return node;
     }
 
+
+
     static getArrow(document, path, closed = false) {
         let pathStr = "";
         for (let i = 0; i < spline.length; i++) {
-            if (i == 0) pathStr += "M ";else pathStr += "L ";
+            if (i == 0) pathStr += "M "; else pathStr += "L ";
             pathStr += path[i].x + " " + path[i].y + " ";
         }
         if (closed) pathStr += "z";
@@ -240,5 +289,7 @@ class SvgUtil {
         node.setAttribute("d", pathStr);
         return node;
     }
+
+
 
 }

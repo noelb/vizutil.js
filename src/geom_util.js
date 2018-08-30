@@ -82,10 +82,19 @@ class GeomUtil {
 
     /**
      *
+     * @deprecated
+     */
+    static distancePath(path) {
+        return GeomUtil.pathLength(path);
+    }
+
+
+    /**
+     *
      * @param path An array of objects that have "x" and "y" properties
      * @returns {number}
      */
-    static distancePath(path) {
+    static pathLength(path) {
         let xy = "x" in pnts[0];
 
         let distance = 0;
@@ -115,6 +124,14 @@ class GeomUtil {
      * @returns {*}
      */
     static intersect(a0x,a0y,a1x,a1y,b0x,b0y,b1x,b1y,segment=true,xy=false) {
+
+        let  _inRange = function(x,y,ax,ay,bx,by) {
+            if (ax != bx) {
+                return x <= ax != x < bx;
+            } else {
+                return y <= ay != y < by;
+            }
+        };
 
         //calculate directional constants
         let k1 = (a1y-a0y) / (a1x-a0x);
@@ -157,7 +174,7 @@ class GeomUtil {
         //If it needs to be on a segment...
         if (segment) {
             //...ensure that the point is within the bounds of BOTH segments, otherwise there's no intersection
-            if (!GeomUtil._inRange(x,y, a0x, a0y, a1x, a1y) || !GeomUtil._inRange(x,y, b0x, b0y, b1x, b1y)) {
+            if (!_inRange(x,y, a0x, a0y, a1x, a1y) || !_inRange(x,y, b0x, b0y, b1x, b1y)) {
                 return null
             }
         }
@@ -167,28 +184,6 @@ class GeomUtil {
     }
 
 
-    /**
-     *
-     * TODO: Double check how this works
-     *
-     * @param x - the x position of the point to test
-     * @param y - the y position of the point to test
-     * @param ax - the x position of the start point in the line segment
-     * @param ay - the y position of the start point in the line segment
-     * @param bx - the x position of the end point in the line segment
-     * @param by - the y position of the end point in the line segment
-     * @returns {boolean}
-     * @private
-     */
-    static _inRange(x,y,ax,ay,bx,by) {
-
-        if (ax != bx) {
-            return x <= ax != x < bx;
-        } else {
-            return y <= ay != y < by;
-        }
-
-    }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -203,8 +198,10 @@ class GeomUtil {
      * @param percent
      * @returns {*[]}
      */
-    static interpolate(x0,y0,x1,y1,percent=.5) {
-        return [ x0 + (x1-x0)*percent,  y0 + (y1-y0)*percent ];
+    static interpolate(x0,y0,x1,y1,percent=.5,xy=false) {
+        return xy ?
+            {x:x0 + (x1-x0)*percent,  y:y0 + (y1-y0)*percent } :
+            [ x0 + (x1-x0)*percent,  y0 + (y1-y0)*percent ];
     }
 
 
@@ -316,13 +313,13 @@ class GeomUtil {
      * @param pathNode {SVGPathElement}
      *
      */
-    static closestPoint(pathNode, point) {
+    static closestPoint(pathNode, x, y, xy=false) {
 
         var distance2 = function(p) {
-            var dx = p.x - point[0],
-                dy = p.y - point[1];
+            var dx = p.x - x,
+                dy = p.y - y;
             return dx * dx + dy * dy;
-        }
+        };
 
         var pathLength =
             pathNode.getTotalLength(),
@@ -356,8 +353,12 @@ class GeomUtil {
             }
         }
 
-        best = [best.x, best.y];
-        best.distance = Math.sqrt(bestDistance);
+        if (xy) {
+            best = {x:best.x, y:best.y, distance:Math.sqrt(bestDistance) };
+        }  else {
+            best = [best.x, best.y];
+            best.distance = Math.sqrt(bestDistance); //XXX: This seems weird...
+        }
         return best;
 
     }
@@ -454,12 +455,6 @@ class GeomUtil {
      *
      * @returns {{x: number, y: number}}
      */
-    static tangent(px,py,_px,_py) {
-        return {
-            x: (px - _px) / 2,
-            y: (py - _py) / 2
-        }
-    }
 
 
     /**
@@ -476,6 +471,15 @@ class GeomUtil {
      *
      */
     static cspline(path, segments=10) {
+
+        let tangent = function(px,py,_px,_py) {
+            return {
+                x: (px - _px) / 2,
+                y: (py - _py) / 2
+            }
+        };
+
+
         let xy = "x" in path[0];
 
         const res = 1/segments; //Convert segments into resolution steps
@@ -487,18 +491,18 @@ class GeomUtil {
         let end = path.length-1;
 
 
-        var m = [];
+        let m = [];
         m[0] = xy ?
-            GeomUtil.tangent( path[1].x, path[1].y, path[0].x, path[0].y ) :
-            GeomUtil.tangent( path[1][0], path[1][1], path[0][0], path[0][1] );
+            tangent( path[1].x, path[1].y, path[0].x, path[0].y ) :
+            tangent( path[1][0], path[1][1], path[0][0], path[0][1] );
         for (let i=1; i < end; i++) {
             m[i] = xy ?
-                GeomUtil.tangent( path[i+1].x, path[i+1].y, path[i-1].x, path[i-1].y ) :
-                GeomUtil.tangent( path[i+1][0], path[i+1][1], path[i-1][0], path[i-1][1] );
+                tangent( path[i+1].x, path[i+1].y, path[i-1].x, path[i-1].y ) :
+                tangent( path[i+1][0], path[i+1][1], path[i-1][0], path[i-1][1] );
         }
         m[end] = xy ?
-            GeomUtil.tangent( path[end].x, path[end].y, path[end-1].x, path[end-1].y ) :
-            GeomUtil.tangent( path[end][0], path[end][1], path[end-1][0], path[end-1][1] );
+            tangent( path[end].x, path[end].y, path[end-1].x, path[end-1].y ) :
+            tangent( path[end][0], path[end][1], path[end-1][0], path[end-1][1] );
 
         for (let k = 0; k <end; k++){
             var k1 = k + 1;
