@@ -1,0 +1,139 @@
+---
+layout: default
+title: GeoUtil
+cssInclude: css/api.css
+---
+
+
+<p>
+References to "Point" objects can either be in the format of a generic object (e.g., {x:12,y:13}) or a numeric array (e.g., [12,13]).
+The array-style is the default. For some methods, you must specify which you want using the "xy" boolean parameter.
+</p>
+
+
+<ul class="api">
+
+
+
+    <li>
+
+        <h3>GeoUtil . toRad ( degrees )</h3>
+        <table>
+            <tr> <th>Name</th> <th>Default</th> </th><th>Description</th> </tr>
+            <tr> <td><span class="param">degrees</span> : float</td> <td/><td>An angle in degree measure</td> </tr>
+            <tr> <td>Return float</td> <td/> <td>An angle in radian measure</td> </tr>
+        </table>
+
+
+        <h4>Example</h4>
+        <pre>
+            console.log( GeomUtil.toRad(180) );
+
+            >
+        </pre>
+
+    </li>
+
+
+
+
+    <li>
+        <h3>GeoUtil . toDeg ( radians )</h3>
+        <table>
+            <tr> <th>Name</th> <th>Default</th> </th><th>Description</th> </tr>
+            <tr> <td><span class="param">radians</span> : float</td> <td/><td>An angle in radian measure</td> </tr>
+            <tr> <td>Return float</td> <td/> <td>an angle in degree measure</td> </tr>
+        </table>
+
+
+        <h4>Example</h4>
+        <pre>
+            console.log( GeomUtil.toDeg(3.14) );
+
+            > 180
+        </pre>
+    </li>
+
+
+
+
+    <li>
+        <h3>GeoUtil . mercProject ( lat, lon, sizeX, sizeY, xy )</h3>
+        <table>
+            <tr> <th>Name</th> <th>Default</th> </th><th>Description</th> </tr>
+            <tr> <td><span class="param">lat, lon</span> : float</td> <td/><td>A geoposition</td> </tr>
+            <tr> <td><span class="param">sizeX, sizeY</span> : float</td> <td/> <td/>The width and height of the rectangle to project onto</td> </tr>
+            <tr> <td><span class="param">xy</span> : boolean</td> <td>false</td> <td>Determine the format of the point - [] vs. {}</td> </tr>
+            <tr> <td>Return Point</td> <td/> <td></td> </tr>
+        </table>
+
+
+        <h4>Example</h4>
+        <pre>
+            console.log( GeomUtil.mercProject(40.712775,-74.005973) );
+            >
+
+            console.log( GeomUtil.mercProject(40.712775,-74.005973, 500, 500) );
+            >
+        </pre>
+    </li>
+
+
+
+
+    <li>
+        <h3>GeoUtil . invMercProject ( ptx, pty, sizeX, sizeY )</h3>
+        <table>
+            <tr> <th>Name</th> <th>Description</th> </tr>
+            <tr> <td><span class="param">ptx, pty</span> : float</td> <td>A position within a rectangle</td> </tr>
+            <tr> <td><span class="param">sizeX, sizeY</span> : float</td> <td>The width and height of the rectangle</td> </tr>
+            <tr> <td>Return [float,float]</td> <td>The latitude and longitude [lat,lon] of the point on a globe</td> </tr>
+        </table>
+
+
+        <h4>Example</h4>
+        <pre>
+            console.log( GeomUtil.invMercProject(.5,.5) );
+            >
+
+            console.log( GeomUtil.mercProject(130, 150, 500, 500) );
+            >
+        </pre>
+    </li>
+
+
+
+    <li>
+        <h3>GeoUtil . r ()</h3>
+        <table>
+            <tr> <th>Name</th> <th>Description</th> </tr>
+            <tr> <td>Return float</td> <td>Always returns 6371, which is the radius of the earth in km</td> </tr>
+        </table>
+    </li>
+
+
+
+    <li>
+        <h3>GeoUtil . distance ( lat0, lon0, lat1, lon1 )</h3>
+        <table>
+            <tr> <th>Name</th> <th>Description</th> </tr>
+            <tr> <td><span class="param">lat0, lon0</span> : float</td> <td>Start position</td> </tr>
+            <tr> <td><span class="param">lat1, lon1</span> : float</td> <td>End position</td> </tr>
+            <tr> <td>Return float</td> <td>Distance between the two positions.</td> </tr>
+        </table>
+    </li>
+
+
+
+    <li>
+        <h3>GeoUtil . bearing ( lat0, lon0, lat1, lon1 )</h3>
+        <table>
+            <tr> <th>Name</th> <th>Description</th> </tr>
+            <tr> <td><span class="param">lat0, lon0</span> : float</td> <td>Start position</td> </tr>
+            <tr> <td><span class="param">lat1, lon1</span> : float</td> <td>End position</td> </tr>
+            <tr> <td>Return float</td> <td>Direction of travel in radians.</td> </tr>
+        </table>
+    </li>
+
+
+</ul>

@@ -1,0 +1,221 @@
+---
+layout: default
+title: SVGUtil
+cssInclude: css/api.css
+---
+
+
+<p>
+SVGUtil provides a variety of methods for easily generating SVGElements that can be added to an SVG document.
+</p>
+
+
+<section class="api_class">
+    <ul class="api">
+
+
+        <li class="method">
+
+            <h3>SVGUtil . getRect ( document, x, y, width, height, center )</h3>
+            <table>
+                <tr> <th>Name</th>                                          <th>Default</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">x</span> : float</td>          <td/>            <td/> </tr>
+                <tr> <td><span class="param">y</span> : float</td>          <td/>            <td/> </tr>
+                <tr> <td><span class="param">width</span> : float</td>      <td/>            <td/> </tr>
+                <tr> <td><span class="param">height</span> : float</td>     <td/>            <td/> </tr>
+                <tr> <td><span class="param">center</span> : boolean</td>   <td>true</td>    <td>If true, the {x,y} parameters define the center point. If false, the {x,y} define the top left corner.</td> </tr>
+                <tr> <td>Return SVGRectElement</td>                         <td/>            <td/>  </tr>
+            </table>
+            <p>
+                ...
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+                var svgDoc = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                var rect = SVGUtil.getRect(document, 0, 0, 100, 100 );
+                svgDoc.appendChild( rect );
+            </pre>
+
+        </li>
+
+
+
+        <li class="method">
+
+            <h3>SVGUtil . getRoundedRect ( document, x, y, width, height, rx, ry, center )</h3>
+            <table>
+                <tr> <th>Name</th>                                          <th>Default</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">x</span> : float</td>          <td/>            <td/> </tr>
+                <tr> <td><span class="param">y</span> : float</td>          <td/>            <td/> </tr>
+                <tr> <td><span class="param">width</span> : float</td>      <td/>            <td/> </tr>
+                <tr> <td><span class="param">height</span> : float</td>     <td/>            <td/> </tr>
+                <tr> <td><span class="param">rx</span> : float</td>         <td>2</td>       <td>The horizontal radius of the rounded corner</td> </tr>
+                <tr> <td><span class="param">ry</span> : float</td>         <td>null</td>    <td>The vertical radius of the rounded corner.</td> </tr>
+                <tr> <td><span class="param">center</span> : boolean</td>   <td>true</td>    <td>If true, the {x,y} parameters define the center point. If false, the {x,y} define the top left corner.</td> </tr>
+                <tr> <td>Return SVGRectElement</td>                         <td/>            <td/> </tr>
+            </table>
+            <p>
+                ...
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+                // A rounded rect
+                // centered at 0,0
+                // width/height of 100
+                // corners rounded to 10
+                var svgDoc = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                var rect = SVGUtil.getRoundedRect(document, 0, 0, 100, 100, 10 );
+                svgDoc.appendChild( rect );
+            </pre>
+
+        </li>
+
+
+
+
+        <li class="method">
+
+            <h3>SVGUtil . getCircle ( document, cx, cy, r )</h3>
+            <table>
+                <tr> <th>Name</th>                                          <th>Description</th> </tr>
+                <tr> <td><span class="param">cx</span> : float</td>         <td/> </tr>
+                <tr> <td><span class="param">cy</span> : float</td>         <td/> </tr>
+                <tr> <td><span class="param">r</span> : float</td>          <td/> </tr>
+                <tr> <td>Return SVGCircleElement</td> <td> </td> </tr>
+            </table>
+            <p>
+                ...
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+                // Creates a circle centered on 0,0 with a radius of 100
+                var svgDoc = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                var circle = SVGUtil.getCircle(document, 0, 0, 100 );
+                svgDoc.appendChild( circle );
+            </pre>
+
+        </li>
+
+
+
+
+        <li class="method">
+
+            <h3>SVGUtil . getEllipse ( document, cx, cy, rx, ry )</h3>
+            <table>
+                <tr> <th>Name</th>                                          <th>Description</th> </tr>
+                <tr> <td><span class="param">cx</span> : float</td>         <td/> </tr>
+                <tr> <td><span class="param">cy</span> : float</td>         <td/> </tr>
+                <tr> <td><span class="param">rx</span> : float</td>         <td/> </tr>
+                <tr> <td><span class="param">ry</span> : float</td>         <td/> </tr>
+                <tr> <td>Return SVGEllipseElement</td>                      <td/> </tr>
+            </table>
+            <p>
+                ...
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+                // Creates a ellipse centered on 0,0 with a width of 200 and height of 100
+                var svgDoc = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                var ellipse = SVGUtil.getEllipse(document, 0, 0, 200, 100 );
+                svgDoc.appendChild( ellipse );
+            </pre>
+
+        </li>
+
+
+
+        <li class="method">
+
+            <h3>SVGUtil . getRegularPolygon ( document, cx, cy, radius, numSides=5 )</h3>
+            <table>
+                <tr> <th>Name</th>                                              <th>Default</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">cx</span> : float</td>             <td/>            <td/> </tr>
+                <tr> <td><span class="param">cy</span> : float</td>             <td/>            <td/> </tr>
+                <tr> <td><span class="param">radius</span> : float</td>         <td/>            <td/> </tr>
+                <tr> <td><span class="param">numSides</span> : float</td>       <td/>            <td/> </tr>
+                <tr> <td>Return SVGPolygonElement</td>                          <td/>            <td/> </tr>
+            </table>
+            <p>
+                ...
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+                // Creates a triangle centered on 0,0 with a radius of 100
+                var svgDoc = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                var poly = SVGUtil.getRegularPolygon(document, 0, 0, 100, 3 );
+                svgDoc.appendChild( poly );
+            </pre>
+
+        </li>
+
+
+
+        <li class="method">
+
+            <h3>SVGUtil . getStar ( document, cx, cy, radiusInner, radiusOuter, numPoints=5 )</h3>
+            <table>
+                <tr> <th>Name</th>                                              <th>Description</th> </tr>
+                <tr> <td><span class="param">cx</span> : float</td>             <td/> </tr>
+                <tr> <td><span class="param">cy</span> : float</td>             <td/> </tr>
+                <tr> <td><span class="param">radiusInner</span> : float</td>    <td/> </tr>
+                <tr> <td><span class="param">radiusOuter</span> : float</td>    <td/> </tr>
+                <tr> <td><span class="param">num</span> : float</td>            <td/> </tr>
+                <tr> <td>Return SVGEllipseElement</td>                          <td/> </tr>
+            </table>
+            <p>
+                ...
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+                // Creates a ellipse centered on 0,0 with a width of 200 and height of 100
+                var svgDoc = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                var star = SVGUtil.getEllipse(document, 0, 0, 200, 100 );
+                svgDoc.appendChild( star );
+            </pre>
+
+        </li>
+
+
+
+        <li class="method">
+
+            <h3>SVGUtil . getCross ( document, cx, cy, radius, thickness, numPoints=5 )</h3>
+            <table>
+                <tr> <th>Name</th>                                              <th>Defaults</th>   <th>Description</th> </tr>
+                <tr> <td><span class="param">cx</span> : float</td>             <td></td>           <td/> </tr>
+                <tr> <td><span class="param">cy</span> : float</td>             <td></td>           <td/> </tr>
+                <tr> <td><span class="param">radius</span> : float</td>         <td></td>           <td/> </tr>
+                <tr> <td><span class="param">thickness</span> : float</td>      <td>20</td>         <td/> </tr>
+                <tr> <td><span class="param">numPoints</span> : float</td>      <td>4</td>          <td/> </tr>
+                <tr> <td>Return SVGEllipseElement</td>                          <td></td>           <td/> </tr>
+            </table>
+            <p>
+                ...
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+                // Creates a cross
+                var svgDoc = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                var cross = SVGUtil.getCross(document, 0, 0, 200, 100 );
+                svgDoc.appendChild( cross );
+
+                // Creates a snowflake-like shape by setting 6 points instead of the default 4
+                var svgDoc = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                var snowflake = SVGUtil.getCross(document, 0, 0, 200, 100, 6 );
+                svgDoc.appendChild( snowflake );
+            </pre>
+
+        </li>
+
+
+    </ul>
+
+</section>

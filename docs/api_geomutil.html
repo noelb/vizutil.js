@@ -1,0 +1,324 @@
+---
+layout: default
+title: GeomUtil
+cssInclude: css/api.css
+---
+
+
+<p>
+References to "Point" objects can either be in the format of a generic object (e.g., {x:12,y:13}) or a numeric array (e.g., [12,13]).
+The array-style is the default. For some methods, you must specify which you want using the "xy" boolean parameter.
+</p>
+
+
+<section class="api_class">
+    <ul class="api">
+
+
+        <li class="method">
+
+
+            <h3>GeomUtil . toPolar ( x, y )</h3>
+            <table>
+                <tr> <th>Name</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">x</span> : float</td> <td></td> </tr>
+                <tr> <td><span class="param">y</span> : float</td> <td></td> </tr>
+                <tr> <td>Return { r : float, theta : float }</td> <td>"r" is the length of the vector. "theta" is the angle in radians.</td> </tr>
+            </table>
+            <p>
+                Takes a Cartesian point (x,y) and converts it to a polar vector defined by a length and angle.
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+                var plr = GeomUtil.toPolar(50,50);
+                console.log(plr.r +","+ plr.theta);
+
+                > { r : 70.71067811865476, theta : 0.7853981633974483 }
+            </pre>
+
+        </li>
+
+
+        <li>
+
+
+            <h3>GeomUtil . toCart ( r, theta, xy )</h3>
+            <table>
+                <tr> <th>Name</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">r</span> : float</td> <td>vector length</td> </tr>
+                <tr> <td><span class="param">theta</span> : float</td> <td>vector angle in radians</td> </tr>
+                <tr> <td><span class="param">xy</span> : bool</td> <td>Determines style of "Point" to return. true={x:12,y:13}, false=[12,13].</td> </tr>
+                <tr> <td>Return Point</td> <td/> <td/> </tr>
+            </table>
+
+
+
+            <h4>Example</h4>
+            <pre>
+                var ary = GeomUtil.toCart(50,3.14);
+                console.log(ary[0] +","+ ary[1]);
+
+                > -49.999936586376975, 0.07963264582434142
+
+                var pnt = GeomUtil.toCart(50,3.14,true);
+                console.log(pnt.x +", "+ pnt.y);
+
+                > -49.999936586376975, 0.07963264582434142
+            </pre>
+
+
+        </li>
+
+
+        <li>
+
+
+            <h3>GeomUtil . distance ( x0, y0, x1, y1 )</h3>
+            <table>
+                <tr> <th>Name</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">x0, y0</span> : float</td> <td>The first point</td> </tr>
+                <tr> <td><span class="param">x1, y1</span> : float</td> <td>The second point</td> </tr>
+                <tr> <td>Return float</td> <td></td> </tr>
+            </table>
+
+
+            <h4>Example</h4>
+            <pre>
+                console.log( GeomUtil.distance(0,0,50,50) );
+
+                > 70.71067811865476
+            </pre>
+
+
+        </li>
+
+
+        <li>
+
+
+            <h3>GeomUtil . pathLength( path )</h3>
+
+            <table>
+                <tr> <th>Name</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">path</span> : [Point]</td> <td>A polyline defined by an array of points.</td> </tr>
+                <tr> <td>Return float</td> <td></td> </tr>
+            </table>
+
+
+            <h4>Example</h4>
+            <pre>
+                var pnts = [ [0,0], [10,4], [-1,20] ];
+                console.log( GeomUtil.pathLength(pnts) );
+
+                > 30.186817453216605
+
+                var pnts = [ {x:0,y:0}, {x:10,y:4}, {x:-1,y:20} ];
+                console.log( GeomUtil.pathLength(pnts) );
+
+                > 30.186817453216605
+            </pre>
+
+
+
+
+        </li>
+
+
+        <li>
+
+
+            <h3>GeomUtil . intersect ( a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y, segment, xy )</h3>
+            <table>
+                <tr> <th>Name</th> <th>Default</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">a0x, a0y</span> : float</td> <td/> <td>Start point of Segment A</td> </tr>
+                <tr> <td><span class="param">a1x, a1y</span> : float</td> <td/> <td>End point of Segment A</td> </tr>
+                <tr> <td><span class="param">b0x, b0y</span> : float</td> <td/> <td>Start point of Segment B</td> </tr>
+                <tr> <td><span class="param">b1x, b1y</span> : float</td> <td/> <td>End point of Segment B</td> </tr>
+                <tr> <td><span class="param">segment</span> : bool</td> <td>true</td> <td>If false, return intersection points that are not directly on the lines themselves</td> </tr>
+                <tr> <td><span class="param">xy</span> : bool</td>  <td>false</td> <td>Determines style of "Point" to return. true={x:12,y:13}, false=[12,13].</td> </tr>
+                <tr> <td>Return Point</td> <td/> <td/></tr>
+            </table>
+
+            <p>
+                Given two line segments, find the point at which they intersect.
+            </p>
+            
+            <h4>Example</h4>
+            <pre>
+                var line0 = [ [0,0], [50,50] ];
+                var line1 = [ [50,0], [0,50] ];
+                console.log( GeomUtil.intersect(
+                        line0[0][0], line0[0][1], line0[1][0], line0[1][1],
+                        line1[0][0], line1[0][1], line1[1][0], line1[1][1]
+                ) );
+
+                > [25,25]
+
+                console.log( GeomUtil.intersect(
+                        line0[0][0], line0[0][1], line0[1][0], line0[1][1],
+                        line1[0][0], line1[0][1], line1[1][0], line1[1][1],
+                        true, true
+                ) );
+
+                > {x:25,y:25}
+
+            </pre>
+
+        </li>
+
+
+
+        <li>
+
+            <h3>GeomUtil . interpolate ( x0, y0, x1, y1, percent, xy )</h3>
+            <table>
+                <tr> <th>Name</th> <th>Default</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">x0, y0</span> : float</td> <td/> <td>Start point of Segment A</td> </tr>
+                <tr> <td><span class="param">x1, y1</span> : float</td> <td/> <td>End point of Segment A</td> </tr>
+                <tr> <td><span class="param">percent</span> : bool</td> <td>.5</td> <td>If false, return intersection points that are not directly on the lines themselves</td> </tr>
+                <tr> <td><span class="param">xy</span> : bool</td>  <td>false</td> <td>Determines style of "Point" to return. true={x:12,y:13}, false=[12,13].</td> </tr>
+                <tr> <td>Return Point</td> <td/> <td/></tr>
+            </table>
+
+            <p>
+                Find a point "percent" way along a line segment.
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+                console.log( GeomUtil.interpolate(0,0,500,1000,.25) );
+
+                > [125,250]
+
+                console.log( GeomUtil.interpolate(0,0,500,1000,.75,true) );
+
+                > {x:375,y:750}
+            </pre>
+        </li>
+
+
+
+        <li>
+
+            <h3>GeomUtil . interpolatePath ( path, percent )</h3>
+            <table>
+                <tr> <th>Name</th> <th>Default</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">path</span> : [Point]</td> <td/> <td> </td> </tr>
+                <tr> <td><span class="param">percent</span> : float</td>  <td>.5</td> <td> </td> </tr>
+                <tr> <td>Return Point</td> <td/> <td> </td></tr>
+            </table>
+
+            <p>
+                Find a point "percent" way along a polyline.
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+            >
+            </pre>
+        </li>
+
+
+        <li>
+
+            <h3>GeomUtil . rotate ( x, y, angleInRadians, originX, originY, xy )</h3>
+            <table>
+                <tr> <th>Name</th> <th>Default</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">x, y</span> : float</td> <td/> <td/> </tr>
+                <tr> <td><span class="param">angleInRadians</span> : float</td>  <td/> <td/> </tr>
+                <tr> <td><span class="param">originX, originY</span> : float</td>  <td>0,0</td> <td>The point around which to rotate.</td> </tr>
+                <tr> <td><span class="param">xy</span> : bool</td>  <td>false</td> <td></td> </tr>
+                <tr> <td>Return Point</td> <td/> <td> </td></tr>
+            </table>
+
+            <p>
+                Find a point "percent" way along a polyline.
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+            >
+            </pre>
+
+        </li>
+
+
+
+        <li>
+
+            <h3>GeomUtil . closestPoint ( pathNode, point )</h3>
+            <table>
+                <tr> <th>Name</th> <th>Default</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">pathNode</span> : SVGPathElement</td> <td/> <td/> </tr>
+                <tr> <td><span class="param">point</span> : float</td>  <td/> <td/> </tr>
+                <tr> <td><span class="param">xy</span> : bool</td>  <td>false</td> <td></td> </tr>
+                <tr> <td>Return Point</td> <td/> <td> </td></tr>
+            </table>
+
+            <p>
+                Find the point on a path closest to a specified point.
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+            >
+            </pre>
+
+        </li>
+
+
+
+        <li>
+
+            <h3>GeomUtil . getOnBezier ( percent, x0, y0, cx1, cy1, cx2, cy2, x3, y3, xy=false )</h3>
+            <table>
+                <tr> <th>Name</th> <th>Default</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">percent</span> : float</td> <td/> <td>The percent along the bezier</td> </tr>
+                <tr> <td><span class="param">x0, y0</span> : float</td>  <td/> <td>The start of the bezier</td> </tr>
+                <tr> <td><span class="param">cx1, cy1</span> : float</td>  <td></td> <td>The first control point</td> </tr>
+                <tr> <td><span class="param">cx2, cy2</span> : float</td>  <td></td> <td>The second control point</td> </tr>
+                <tr> <td><span class="param">x3, y3</span> : float</td>  <td></td> <td>The end of the bezier</td> </tr>
+                <tr> <td><span class="param">xy</span> : float</td>  <td>false</td> <td></td> </tr>
+                <tr> <td>Return Point</td> <td/> <td> </td></tr>
+            </table>
+
+            <p>
+                Find the point on a bezier at the percent specified.
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+            >
+            </pre>
+
+        </li>
+
+
+
+
+        <li>
+
+            <h3>GeomUtil . cspline ( path, segments ) </h3>
+            <table>
+                <tr> <th>Name</th> <th>Default</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">path</span> : [Point]</td> <td/> <td>The percent along the bezier</td> </tr>
+                <tr> <td><span class="param">segments</span> : int</td>  <td>12</td> <td>The resolution of the path</td> </tr>
+                <tr> <td>Return [Point]</td> <td/> <td> </td></tr>
+            </table>
+
+            <p>
+                Creates a smooth curve passing through each point in the path.
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+            >
+            </pre>
+
+        </li>
+
+
+    </ul>
+
+</section>

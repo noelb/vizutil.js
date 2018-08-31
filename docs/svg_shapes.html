@@ -1,0 +1,117 @@
+---
+layout: default
+title: SVG Shapes
+---
+
+
+
+<p>
+    You can quickly generate simple geometric shapes use one of the provided convenience methods
+</p>
+
+
+
+<pre>
+
+var circle = SvgUtil.getCircle(document, 0, 0, 100);
+var ellipse = SvgUtil.getEllipse(document, 0, 0, 100, 50);
+var rect = SvgUtil.getRect(document, 0, 0, 100, 100);
+var rrect = SvgUtil.getRoundedRect(document, 0, 0, 100, 100, 10, 10);
+var poly = SvgUtil.getRegularPolygon(document, 0, 0, 100, 7);
+var star = SvgUtil.getStar(document, 0, 0, 100, 50, 7);
+
+</pre>
+
+
+
+<div class="diagram">
+    <!-- The SVG diagram will be appended here -->
+</div>
+
+
+
+<!--<form onsubmit="redraw(segments,Util.randomPath(10)); return false;">-->
+
+    <!--<li class="range">-->
+        <!--<label for="rangeinput">Segments</label>-->
+        <!--<output id="rangevalue">10</output>-->
+        <!--<input id="rangeinput" type="range" min="1" max="12" step="1" value="10" oninput="redraw(value,points)" onchange="redraw(value,points)"/>-->
+    <!--</li>-->
+
+    <!--<li>-->
+        <!--<button>Randomize</button><br/>-->
+    <!--</li>-->
+
+<!--</form>-->
+
+
+
+<style>
+.diagram {
+    stroke: black;
+    fill: none;
+    stroke-width: .5px;
+}
+</style>
+
+
+
+<script>
+var mainSVG = null;
+
+function redraw() {
+
+
+    //Create an SVG document
+    if (mainSVG != null) mainSVG.parentElement.removeChild(mainSVG);
+    mainSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    mainSVG.setAttribute("width", Util.WIDTH.toString() );
+    mainSVG.setAttribute("height", Util.WIDTH.toString() );
+    document.getElementsByClassName("diagram")[0].appendChild(mainSVG);
+
+
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+    //Convert a spline to an SVG path
+    var STEP = 110;
+    var SIZE = 40;
+    var X0 = Util.WIDTH/2 - (3*STEP)/2;
+    var Y0 = Util.WIDTH/2 - (3*STEP)/2;
+
+    // Generate the grid positions
+    var pos = [];
+    for (var y=0; y < 4; y++) for (var x=0; x < 4; x++) pos.push( {x:X0 + x*STEP, y:Y0 + y*STEP} );
+
+    // Place each of the generated shapes
+    var i= 0;
+    mainSVG.appendChild( SvgUtil.getCircle(document,          pos[i].x,   pos[i++].y,   SIZE                              ) );
+    mainSVG.appendChild( SvgUtil.getEllipse(document,         pos[i].x,   pos[i++].y,   SIZE*(9/10),    SIZE*(10/9)       ) );
+    mainSVG.appendChild( SvgUtil.getEllipse(document,         pos[i].x,   pos[i++].y,   SIZE*(10/9),    SIZE*(9/10)       ) );
+    mainSVG.appendChild( SvgUtil.getCross(document,           pos[i].x,   pos[i++].y,   SIZE,           SIZE*.5, 3         ) );
+
+    mainSVG.appendChild( SvgUtil.getRect(document,            pos[i].x,   pos[i++].y,   SIZE*1.8,       SIZE*1.8          ) );
+    mainSVG.appendChild( SvgUtil.getRect(document,            pos[i].x,   pos[i++].y,   SIZE*1.3,       SIZE*2            ) );
+    mainSVG.appendChild( SvgUtil.getRoundedRect(document,     pos[i].x,   pos[i++].y,   SIZE*1.8,       SIZE*1.8,   15, 15) );
+    mainSVG.appendChild( SvgUtil.getCross(document,           pos[i].x,   pos[i++].y,   SIZE,           SIZE*.7, 4            ) );
+
+    mainSVG.appendChild( SvgUtil.getStar(document,            pos[i].x,   pos[i++].y,   SIZE*.4,        SIZE              ) );
+    mainSVG.appendChild( SvgUtil.getStar(document,            pos[i].x,   pos[i++].y,   SIZE*.7,        SIZE,    7        ) );
+    mainSVG.appendChild( SvgUtil.getStar(document,            pos[i].x,   pos[i++].y,   SIZE*.8,        SIZE,    30       ) );
+    mainSVG.appendChild( SvgUtil.getCross(document,           pos[i].x,   pos[i++].y,   SIZE,           SIZE/2, 6            ) );
+
+    mainSVG.appendChild( SvgUtil.getRegularPolygon(document,  pos[i].x,   pos[i++].y,   SIZE,           5                 ) );
+    mainSVG.appendChild( SvgUtil.getRegularPolygon(document,  pos[i].x,   pos[i++].y,   SIZE,           6                 ) );
+    mainSVG.appendChild( SvgUtil.getRegularPolygon(document,  pos[i].x,   pos[i++].y,   SIZE,           7                 ) );
+    mainSVG.appendChild( SvgUtil.getCross(document,           pos[i].x,   pos[i++].y,   SIZE,           SIZE/3, 7            ) );
+
+
+
+
+}
+
+
+
+redraw();
+
+</script>

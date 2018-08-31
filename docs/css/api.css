@@ -1,0 +1,106 @@
+#mainbody {
+    width: auto;
+}
+
+
+#mainbody > section {
+
+}
+
+table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+    border: 1px solid #c8c8c8;
+    font-size: 8pt;
+    width: 100%;
+    margin: 0px 0px 24px 0px;
+}
+
+tr:nth-child(odd) {
+    background: #f4f4f4;
+}
+
+th {
+    text-align: left;
+    font-weight: normal;
+    color: black;
+    border: 1px solid #c8c8c8;
+}
+th, td {
+    padding: 6px 12px 6px 12px;
+    border-right: 1px solid #c8c8c8;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+
+}
+
+li {
+    margin: 0;
+    padding: 0;
+}
+
+.param {
+    color: black;
+}
+
+
+
+.api > li {
+    margin: 4em 0 0 0;
+    padding: 4em 0 0 0;
+    border-top: 1px solid;
+
+}
+
+.api ul {
+    font-family: Courier;
+    font-size: 8pt;
+    margin: .5em 0;
+}
+.api ul li {
+
+
+    list-style-type: none;
+    margin: 0 0 0 0em;
+}
+
+
+
+
+.api h3 {
+    font-size: 18pt;
+    margin: 0 0 24px 0;
+    padding: 0;
+    font-weight: 300;
+    color: #00ddcc;
+}
+
+.api h4 {
+    font-size: 10.5pt;
+    margin: 1.5em 0 .5em 0;
+    padding: 0;
+    color: #000000;
+    font-weight:normal;
+}
+
+.api pre {
+    font-size: 10pt;
+    padding: 12px;
+    margin: 0 0 12px 0;
+}
+
+.api p {
+    margin: 0 0 24px 0;
+}
+
+
+.api strong {
+    color:#000000;
+    font-weight:normal;
+}
+
+
+

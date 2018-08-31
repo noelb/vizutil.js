@@ -22,7 +22,7 @@ var GeomUtil = function () {
          * Converts cartesian (x,y) coordinates, to polar coordinates (angle/length)
          *
          * @param x number
-         * @param y
+         * @param y number
          * @returns {{r: number, theta: number}}
          */
         value: function toPolar(x, y) {
@@ -31,9 +31,9 @@ var GeomUtil = function () {
 
         /**
          *
-         * @param r
-         * @param theta
-         * @param xy
+         * @param r number
+         * @param theta number
+         * @param xy Point
          * @returns {*}
          */
 

@@ -10,7 +10,7 @@ class GeomUtil {
      * Converts cartesian (x,y) coordinates, to polar coordinates (angle/length)
      *
      * @param x number
-     * @param y
+     * @param y number
      * @returns {{r: number, theta: number}}
      */
     static toPolar(x, y) {
@@ -21,9 +21,9 @@ class GeomUtil {
 
     /**
      *
-     * @param r
-     * @param theta
-     * @param xy
+     * @param r number
+     * @param theta number
+     * @param xy Point
      * @returns {*}
      */
     static toCart(r, theta, xy=false) {

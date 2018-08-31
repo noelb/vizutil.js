@@ -1,0 +1,73 @@
+---
+layout: default
+title: MathUtil
+cssInclude: css/api.css
+---
+
+
+<p>
+References to "Point" objects can either be in the format of a generic object (e.g., {x:12,y:13}) or a numeric array (e.g., [12,13]).
+The array-style is the default. For some methods, you must specify which you want using the "xy" boolean parameter.
+</p>
+
+
+<section class="api_class">
+    <ul class="api">
+
+
+        <li class="method">
+
+
+            <h3>MathUtil . getRandomNumGen ( seed )</h3>
+            <table>
+                <tr> <th>Name</th> <th>Description</th> </tr>
+                <tr> <td><span class="param">seed</span> : int</td> <td></td> </tr>
+                <tr> <td>Return function</td> <td>Returns a function that generates random numbers.</td> </tr>
+            </table>
+            <p>
+                This method returns a function. The function will return a random number whenever executed.
+                However, the numbers will always be in the same sequence (determined by the seed).
+            </p>
+
+            <h4>Example</h4>
+            <pre>
+                var randomNumGen = MathUtil.getRandomNumGen();
+                console.log( randomNumGen() );
+                console.log( randomNumGen() );
+                console.log( randomNumGen() );
+                > 0.000007826369259425611
+                > 0.13153778814316625
+                > 0.7556053221950332
+
+                randomNumGen = MathUtil.getRandomNumGen(4);
+                console.log( randomNumGen() );
+                > 0.000031305477037702444
+
+                randomNumGen = MathUtil.getRandomNumGen(4);
+                console.log( randomNumGen() );
+                > 0.000031305477037702444
+
+
+            </pre>
+
+            <script>
+                var randomNumGen = MathUtil.getRandomNumGen();
+                console.log( randomNumGen() );
+                console.log( randomNumGen() );
+                console.log( randomNumGen() );
+
+
+                randomNumGen = MathUtil.getRandomNumGen(4);
+                console.log( randomNumGen() );
+
+                randomNumGen = MathUtil.getRandomNumGen(4);
+                console.log( randomNumGen() );
+
+            </script>
+
+        </li>
+
+
+    </ul>
+
+</section>

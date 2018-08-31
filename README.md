@@ -52,7 +52,10 @@ let mypoint = {x:123,y:567}
 
 ## Other (even more) excellent libraries
 
-If you like this library, you'll probably  find these libraries
-to be incredibly useful as well.
+If you like this library, you'll probably also find these libraries
+to be incredibly useful.
 * https://pomax.github.io/bezierjs/
 * https://github.com/jsplumb/jsBezier
+
+
+##
